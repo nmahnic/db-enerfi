@@ -18,6 +18,24 @@ class Client:
         return data
         # print(type(r.json()))
 
+    def addUser(name,surname,mail,password,usernick):
+        URL = 'http://localhost:5000/user/'
+        payload = {
+            'mail': mail,
+            'name': name,
+            'password': password,
+            'surname': surname,
+            'usernick': usernick
+        }
+        headers = {'content-type': 'application/json'}
+        r = requests.post(URL, data=json.dumps(payload), headers=headers)
+
+        print(r.status_code)
+        pprint(r.json())
+        data = json.loads(r.text)
+        return data
+        # print(type(r.json()))
+
     def listDum():
         URL = 'http://localhost:5000/dum/'
         r = requests.get(URL)
@@ -75,7 +93,22 @@ if __name__ == '__main__':
         else:
             pass
     elif sys.argv[1] == '-a':
-        print("NOT IMPLEMENTED YET")
+        if sys.argv[2] == '--user':
+            name = input("Ingrese nombre: ")
+            # surname = input("Ingrese surname: ")
+            # mail = input("Ingrese mail: ")
+            # password = input("Ingrese password: ")
+            # usernick = input("Ingrese usernick: ")
+            # Client.addUser(name,surname,mail,password,usernick)
+            Client.addUser(name,"lopez","hlopez@gmail.com","1234","huguito")
+        elif sys.argv[2] == '--dum':
+            print("NOT IMPLEMENTED YET")
+        elif sys.argv[2] == '--meter':
+            print("NOT IMPLEMENTED YET")
+        elif sys.argv[2] == '--measure':
+            print("NOT IMPLEMENTED YET")
+        else:
+            pass
     elif sys.argv[1] == '-b':
         print("NOT IMPLEMENTED YET")
     elif sys.argv[1] == '-m':

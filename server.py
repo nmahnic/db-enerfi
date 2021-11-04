@@ -7,12 +7,13 @@ import os
 # adding Folder_2 to the system path
 sys.path.insert(0, os.getcwd()+'/utils')
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_restful import Resource, Api
 import model
 
 app = Flask(__name__)
 api = Api(app)
+
 
 @api.resource('/user/')
 class userList(Resource):
@@ -20,6 +21,27 @@ class userList(Resource):
         a = model.listAlluser()
         # print(a)
         return jsonify(a)
+    def post(self):
+        args = request.get_json()
+        userExist = model.findUser(
+            name=args["name"],
+            surname=args["surname"],
+            usernick=args["usernick"],
+            password=args["password"],
+            mail=args["mail"],
+        )
+        if userExist:
+            return args, 202
+        else:
+            model.User(
+                name=args["name"],
+                surname=args["surname"],
+                usernick=args["usernick"],
+                password=args["password"],
+                mail=args["mail"],
+            )
+            print("POST ->", args)
+            return args, 201
 
 @api.resource('/dum/')
 class dumList(Resource):

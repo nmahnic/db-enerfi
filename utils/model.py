@@ -65,9 +65,23 @@ def to_dict(obj):
 
 
 def finder(name):
-    artist = User.selectBy(name=name).getOne()
-    d = to_dict(artist)
+    query = User.selectBy(name=name).getOne()
+    d = to_dict(query)
     return d
+
+def findUser(name,surname,usernick,password,mail):
+    query = User.selectBy(
+        name=name,
+        surname=surname,
+        usernick=usernick,
+        password=password,
+        mail=mail
+    )
+    if query.count() != 0:
+        print(query.getOne())
+        return True
+    else:
+        return False
 
 
 def listAlluser():

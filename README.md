@@ -30,3 +30,9 @@ If it miss some dependencies we can use
 ```
 pip3 install -r utils/requirements.txt
 ```
+
+## Bash util commands
+POST:
+```
+curl -d '{"user":"tiago", "meter_id":null}' -H "Content-Type: application/json" -X POST http://localhost:500/users
+```
