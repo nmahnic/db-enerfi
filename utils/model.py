@@ -72,7 +72,7 @@ def to_dict(obj):
 
 
 def findLastDumIdGenerated():
-    return Dum.select().count()-1
+    return Dum.select().count()
 
 def finder(name):
     query = User.selectBy(name=name).getOne()
