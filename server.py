@@ -56,6 +56,25 @@ class dumList(Resource):
         a = model.listAlldum()
         # print(a)
         return jsonify(a)
+    def post(self):
+        args = request.get_json()
+        dum = model.findDumByMac(mac=args["mac"])
+        if dum == None:
+            model.Dum(
+                name= args["name"],
+                userID = args["userid"]
+            )
+            dumId = model.findLastDumIdGenerated()
+            model.Meter(
+                macAddress= args["mac"],
+                dumID = dumId,
+                userID = args["userid"]
+            )
+            return {'insert':'OK'},200
+        else:
+            print("DumNOTExist")
+            return {'insert':'DumNOTExist'},200
+
 
 @api.resource('/meter/')
 class meterList(Resource):
@@ -74,7 +93,7 @@ class measureList(Resource):
     def post(self):
         args = request.get_json()
         print(args)
-        dum = model.findDum(mac=args["mac"])
+        dum = model.findDumByMac(mac=args["mac"])
         if dum == None:
             print("DumNOTExist")
             return {'insert':'DumNOTExist'},200

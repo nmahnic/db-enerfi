@@ -31,7 +31,6 @@ class Meter(so.SQLObject):
     class sqlmeta:
         table = "meter"
     macAddress = so.StringCol(length=50, varchar=True)
-    ip = so.StringCol(length=50, varchar=True)
     user = so.ForeignKey('User')
     dum = so.ForeignKey('Dum')
     # duma = so.SingleJoin('Dum')
@@ -72,12 +71,20 @@ def to_dict(obj):
     return d
 
 
+def findLastDumIdGenerated():
+    return Dum.select().count()-1
+
 def finder(name):
     query = User.selectBy(name=name).getOne()
     d = to_dict(query)
     return d
 
-def findDum(mac):
+def finderUserByID(id):
+    query = User.selectBy(id=id).getOne()
+    d = to_dict(query)
+    return d
+
+def findDumByMac(mac):
     queryMeter = Meter.selectBy(macAddress=mac)
     if queryMeter.count() != 0:
         return queryMeter[0]

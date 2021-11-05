@@ -67,6 +67,21 @@ class Client:
         return data
         # print(type(r.json()))
 
+    def addDum(userid,name,mac):
+        URL = 'http://localhost:5000/dum/'
+        payload = {
+            'userid':userid,
+            'name':name,
+            'mac':mac
+        }
+        headers = {'content-type': 'application/json'}
+        r = requests.post(URL, data=json.dumps(payload), headers=headers)
+
+        print(r.status_code)
+        pprint(r.json())
+        data = json.loads(r.text)
+        return data
+
     def listMeasure():
         URL = 'http://localhost:5000/measure/'
         r = requests.get(URL)
@@ -148,10 +163,12 @@ if __name__ == '__main__':
             # usernick = input("Ingrese usernick: ")
             # Client.addUser(name,surname,mail,password,usernick)
             Client.addUser(name,"lopez","hlopez@gmail.com","1234","huguito")
-        elif sys.argv[2] == '--dum':
-            print("NOT IMPLEMENTED YET")
-        elif sys.argv[2] == '--meter':
-            print("NOT IMPLEMENTED YET")
+        elif sys.argv[2] == '--dum' or sys.argv[2] == '--meter':
+            print("'-a --dum' o '-a --meter' es lo mismo")
+            userid = input("UserID:")
+            name = input("Ingres nombre del DUM:")
+            mac = input("ingrese mac:")
+            Client.addDum(userid,name,mac)
         elif sys.argv[2] == '--measure':
             mac = input("Ingrese mac: ")
             active_power = 1.4

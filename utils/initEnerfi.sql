@@ -40,7 +40,6 @@ CREATE TABLE meter
 (
     id INT NOT NULL AUTO_INCREMENT,
     mac_address VARCHAR(50),
-    ip VARCHAR(50),
     user_id INT,
     dum_id INT,
     CONSTRAINT PK_meter PRIMARY KEY  (id)
@@ -112,8 +111,8 @@ INSERT INTO dum (user_id,name) VALUES (3, 'Lavarropas');
 INSERT INTO dum (user_id,name) VALUES (4, 'Zapatilla ');
 INSERT INTO dum (user_id,name) VALUES (5, 'Lavarropas');
 INSERT INTO dum (user_id,name) VALUES (5, 'Computadora');
-INSERT INTO meter (mac_address,ip,user_id,dum_id) VALUES ('84-D8-1B-0C-5B-C1','192.168.0.2',1,1);
-INSERT INTO meter (mac_address,ip,user_id,dum_id) VALUES ('B0-B2-8F-1D-4D-02','192.168.0.3',1,2);
+INSERT INTO meter (mac_address,user_id,dum_id) VALUES ('84-D8-1B-0C-5B-C1',1,1);
+INSERT INTO meter (mac_address,user_id,dum_id) VALUES ('B0-B2-8F-1D-4D-02',1,2);
 INSERT INTO measure (
         dum_id,vrms,irms,
         active_power,pf,thd,cos_phi,
