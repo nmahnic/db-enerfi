@@ -14,6 +14,12 @@ import model
 app = Flask(__name__)
 api = Api(app)
 
+@api.resource('/test/')
+class getMeasureByDum(Resource):
+    def get(self):
+        a = model.getMeasureByDum()
+        # print(a)
+        return jsonify(a)
 
 @api.resource('/user/')
 class userList(Resource):
@@ -43,12 +49,14 @@ class userList(Resource):
             print("POST ->", args)
             return args, 201
 
-@api.resource('/test/')
-class getMeasureByDum(Resource):
+
+@api.resource('/meter/')
+class meterList(Resource):
     def get(self):
-        a = model.getMeasureByDum()
+        a = model.listAllmeter()
         # print(a)
         return jsonify(a)
+
 
 @api.resource('/dum/')
 class dumList(Resource):
@@ -72,16 +80,8 @@ class dumList(Resource):
             )
             return {'insert':'OK'},200
         else:
-            print("DumNOTExist")
-            return {'insert':'DumNOTExist'},200
-
-
-@api.resource('/meter/')
-class meterList(Resource):
-    def get(self):
-        a = model.listAllmeter()
-        # print(a)
-        return jsonify(a)
+            print("Exist DUM")
+            return {'insert':'DUM Exist'},200
 
 @api.resource('/measure/')
 class measureList(Resource):
