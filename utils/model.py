@@ -34,6 +34,7 @@ class Meter(so.SQLObject):
     ip = so.StringCol(length=50, varchar=True)
     user = so.ForeignKey('User')
     dum = so.ForeignKey('Dum')
+    # duma = so.SingleJoin('Dum')
 
 
 class Measure(so.SQLObject):
@@ -60,8 +61,8 @@ class Measure(so.SQLObject):
     dum = so.ForeignKey('Dum')
 
 
-def test():
-    measures = Dum.select()[0].measures
+def getMeasureByDum():
+    measures = Dum.selectBy(id=1).getOne().measures
     d = [to_dict(measure) for measure in measures]
     return d
 
@@ -75,6 +76,13 @@ def finder(name):
     query = User.selectBy(name=name).getOne()
     d = to_dict(query)
     return d
+
+def findDum(mac):
+    queryMeter = Meter.selectBy(macAddress=mac)
+    if queryMeter.count() != 0:
+        return queryMeter[0]
+    else:
+        return None
 
 def findUser(name,surname,usernick,password,mail):
     query = User.selectBy(

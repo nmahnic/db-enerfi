@@ -134,6 +134,19 @@ INSERT INTO measure (
         freq_5th,freq_6th,freq_7th,freq_8th,
         freq_9th,freq_10th
     ) VALUES (
+        1,1.1,1.2,
+        1.3,0.9,0.8,0.1,
+        1.1 , 1.2, 1.3, 1.4,
+        1.5 , 1.6, 1.7, 1.8,
+        1.9 , 1.01
+    );
+INSERT INTO measure (
+        dum_id,vrms,irms,
+        active_power,pf,thd,cos_phi,
+        freq_1st,freq_2nd,freq_3rd,freq_4th,
+        freq_5th,freq_6th,freq_7th,freq_8th,
+        freq_9th,freq_10th
+    ) VALUES (
         4,1.1,1.2,
         1.3,0.9,0.8,0.1,
         1.1 , 1.2, 1.3, 1.4,

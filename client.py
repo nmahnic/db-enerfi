@@ -11,7 +11,7 @@ class Client:
     def test():
         URL = 'http://localhost:5000/test/'
         r = requests.get(URL)
-        
+
         print(r.status_code)
         pprint(r.json())
         data = json.loads(r.text)
@@ -77,6 +77,40 @@ class Client:
         return data
         # print(type(r.json()))
 
+    def addMeasure(
+            mac,active_power,cos_phi,dumID,freq_10th,freq_1st,freq_2nd,freq_3rd,
+            freq_4th,freq_5th,freq_6th,freq_7th,freq_8th,freq_9th,irms,pf,thd,vrms
+        ):
+        URL = 'http://localhost:5000/measure/'
+        payload = {
+            'mac':mac,
+            'active_power': active_power,
+            'cos_phi': cos_phi,
+            'dumID': dumID,
+            'freq_10th': freq_10th,
+            'freq_1st': freq_1st,
+            'freq_2nd': freq_2nd,
+            'freq_3rd': freq_3rd,
+            'freq_4th': freq_4th,
+            'freq_5th': freq_5th,
+            'freq_6th': freq_6th,
+            'freq_7th': freq_7th,
+            'freq_8th': freq_8th,
+            'freq_9th': freq_9th,
+            'irms': irms,
+            'pf': pf,
+            'thd': thd,
+            'vrms': vrms
+        }
+        headers = {'content-type': 'application/json'}
+        r = requests.post(URL, data=json.dumps(payload), headers=headers)
+
+        print(r.status_code)
+        pprint(r.json())
+        data = json.loads(r.text)
+        return data
+        # print(type(r.json()))
+
 if __name__ == '__main__':
     # chequeo de los argumentos de la linea de comandos
     if len(sys.argv) != 3:
@@ -119,7 +153,28 @@ if __name__ == '__main__':
         elif sys.argv[2] == '--meter':
             print("NOT IMPLEMENTED YET")
         elif sys.argv[2] == '--measure':
-            print("NOT IMPLEMENTED YET")
+            mac = input("Ingrese mac: ")
+            active_power = 1.4
+            cos_phi = .4
+            dumID = .5
+            freq_10th = .5
+            freq_1st = .5
+            freq_2nd = .5
+            freq_3rd = .5
+            freq_4th = .5
+            freq_5th = .5
+            freq_6th = .5
+            freq_7th = .5
+            freq_8th = .5
+            freq_9th = .5
+            irms = .5
+            pf = .5
+            thd = .5
+            vrms = .5
+            Client.addMeasure(
+                mac,active_power,cos_phi,dumID,freq_10th,freq_1st,freq_2nd,freq_3rd,
+                freq_4th,freq_5th,freq_6th,freq_7th,freq_8th,freq_9th,irms,pf,thd,vrms
+            )
         else:
             pass
     elif sys.argv[1] == '-b':
