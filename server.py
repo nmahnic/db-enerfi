@@ -43,6 +43,13 @@ class userList(Resource):
             print("POST ->", args)
             return args, 201
 
+@api.resource('/test/')
+class test(Resource):
+    def get(self):
+        a = model.test()
+        # print(a)
+        return jsonify(a)
+
 @api.resource('/dum/')
 class dumList(Resource):
     def get(self):

@@ -7,6 +7,17 @@ import json
 
 
 class Client: 
+
+    def test():
+        URL = 'http://localhost:5000/test/'
+        r = requests.get(URL)
+        
+        print(r.status_code)
+        pprint(r.json())
+        data = json.loads(r.text)
+        return data
+        # print(type(r.json()))
+
         
     def listUser():
         URL = 'http://localhost:5000/user/'
@@ -77,7 +88,7 @@ if __name__ == '__main__':
         print("Error en la linea de comandos. Opcion no valida (-a, -b, -m, -l, -c)")
         sys.exit()
 
-    if sys.argv[2] not in ('--user', '--dum', '--meter', '--measure'):
+    if sys.argv[2] not in ('--user', '--dum', '--meter', '--measure','--test'):
         print("Error en la linea de comandos. Opcion no valida (--user, --dum, --meter, --measure)")
         sys.exit()
 
@@ -90,6 +101,8 @@ if __name__ == '__main__':
             Client.listmeter()
         elif sys.argv[2] == '--measure':
             Client.listMeasure()
+        elif sys.argv[2] == '--test':
+            Client.test()
         else:
             pass
     elif sys.argv[1] == '-a':

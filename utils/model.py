@@ -23,16 +23,18 @@ class User(so.SQLObject):
 class Dum(so.SQLObject):
     class sqlmeta:
         table = "dum"
-    user_id = so.ForeignKey('User')
+    user = so.ForeignKey('User')
     name = so.StringCol(length=50, varchar=True)
+    measures = so.MultipleJoin('Measure')
 
 class Meter(so.SQLObject):
     class sqlmeta:
         table = "meter"
     macAddress = so.StringCol(length=50, varchar=True)
     ip = so.StringCol(length=50, varchar=True)
-    user_id = so.ForeignKey('User')
-    dum_id = so.ForeignKey('Dum')
+    user = so.ForeignKey('User')
+    dum = so.ForeignKey('Dum')
+
 
 class Measure(so.SQLObject):
     class sqlmeta:
@@ -55,8 +57,13 @@ class Measure(so.SQLObject):
     freq_8th = so.FloatCol()
     freq_9th = so.FloatCol()
     freq_10th = so.FloatCol()
-    dum_id = so.ForeignKey('Dum')
+    dum = so.ForeignKey('Dum')
 
+
+def test():
+    measures = Dum.select()[0].measures
+    d = [to_dict(measure) for measure in measures]
+    return d
 
 def to_dict(obj):
     d = dict((c, getattr(obj, c)) for c in obj.sqlmeta.columns)
@@ -87,6 +94,7 @@ def findUser(name,surname,usernick,password,mail):
 def listAlluser():
     users = User.select()
     d = [to_dict(user) for user in users]
+    # print(d)
     return d
 
 def listAlldum():
