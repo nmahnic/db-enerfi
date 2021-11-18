@@ -52,24 +52,11 @@ if __name__ == '__main__':
             active_power = 1.4
             cos_phi = .4
             dumID = .5
-            freq_10th = .5
-            freq_1st = .5
-            freq_2nd = .5
-            freq_3rd = .5
-            freq_4th = .5
-            freq_5th = .5
-            freq_6th = .5
-            freq_7th = .5
-            freq_8th = .5
-            freq_9th = .5
             irms = .5
             pf = .5
             thd = .5
             vrms = .5
-            Client.addMeasure(
-                mac,active_power,cos_phi,dumID,freq_10th,freq_1st,freq_2nd,freq_3rd,
-                freq_4th,freq_5th,freq_6th,freq_7th,freq_8th,freq_9th,irms,pf,thd,vrms
-            )
+            Client.addMeasure(mac,active_power,cos_phi,dumID,irms,pf,thd,vrms)
         else:
             pass
     elif sys.argv[1] == '-b':

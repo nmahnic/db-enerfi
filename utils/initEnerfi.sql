@@ -64,16 +64,6 @@ CREATE TABLE measure
     pf FLOAT,
     thd FLOAT,
     cos_phi FLOAT,
-    freq_1st FLOAT,
-    freq_2nd FLOAT,
-    freq_3rd FLOAT,
-    freq_4th FLOAT,
-    freq_5th FLOAT,
-    freq_6th FLOAT,
-    freq_7th FLOAT,
-    freq_8th FLOAT,
-    freq_9th FLOAT,
-    freq_10th FLOAT,
     CONSTRAINT PK_measureID PRIMARY KEY  (id)
 );
 
@@ -113,42 +103,6 @@ INSERT INTO dum (user_id,name) VALUES (5, 'Lavarropas');
 INSERT INTO dum (user_id,name) VALUES (5, 'Computadora');
 INSERT INTO meter (mac_address,user_id,dum_id) VALUES ('84-D8-1B-0C-5B-C1',1,1);
 INSERT INTO meter (mac_address,user_id,dum_id) VALUES ('B0-B2-8F-1D-4D-02',1,2);
-INSERT INTO measure (
-        dum_id,vrms,irms,
-        active_power,pf,thd,cos_phi,
-        freq_1st,freq_2nd,freq_3rd,freq_4th,
-        freq_5th,freq_6th,freq_7th,freq_8th,
-        freq_9th,freq_10th
-    ) VALUES (
-        1,1.1,1.2,
-        1.3,0.9,0.8,0.1,
-        1.1 , 1.2, 1.3, 1.4,
-        1.5 , 1.6, 1.7, 1.8,
-        1.9 , 1.01
-    );
-INSERT INTO measure (
-        dum_id,vrms,irms,
-        active_power,pf,thd,cos_phi,
-        freq_1st,freq_2nd,freq_3rd,freq_4th,
-        freq_5th,freq_6th,freq_7th,freq_8th,
-        freq_9th,freq_10th
-    ) VALUES (
-        1,1.1,1.2,
-        1.3,0.9,0.8,0.1,
-        1.1 , 1.2, 1.3, 1.4,
-        1.5 , 1.6, 1.7, 1.8,
-        1.9 , 1.01
-    );
-INSERT INTO measure (
-        dum_id,vrms,irms,
-        active_power,pf,thd,cos_phi,
-        freq_1st,freq_2nd,freq_3rd,freq_4th,
-        freq_5th,freq_6th,freq_7th,freq_8th,
-        freq_9th,freq_10th
-    ) VALUES (
-        4,1.1,1.2,
-        1.3,0.9,0.8,0.1,
-        1.1 , 1.2, 1.3, 1.4,
-        1.5 , 1.6, 1.7, 1.8,
-        1.9 , 1.01
-    );
+INSERT INTO measure (dum_id,vrms,irms,active_power,pf,thd,cos_phi) VALUES (1,1.1,1.2,1.3,0.9,0.8,0.1);
+INSERT INTO measure (dum_id,vrms,irms,active_power,pf,thd,cos_phi) VALUES (1,1.1,1.2,1.3,0.9,0.8,0.1);
+INSERT INTO measure (dum_id,vrms,irms,active_power,pf,thd,cos_phi) VALUES (2,1.1,1.2,1.3,0.9,0.8,0.1);

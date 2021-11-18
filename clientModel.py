@@ -89,26 +89,13 @@ class Client:
         return data
         # print(type(r.json()))
 
-    def addMeasure(
-            mac,active_power,cos_phi,dumID,freq_10th,freq_1st,freq_2nd,freq_3rd,
-            freq_4th,freq_5th,freq_6th,freq_7th,freq_8th,freq_9th,irms,pf,thd,vrms
-        ):
+    def addMeasure(mac,active_power,cos_phi,dumID,irms,pf,thd,vrms):
         URL = 'http://localhost:5000/measure/'
         payload = {
             'mac':mac,
             'active_power': active_power,
             'cos_phi': cos_phi,
             'dumID': dumID,
-            'freq_10th': freq_10th,
-            'freq_1st': freq_1st,
-            'freq_2nd': freq_2nd,
-            'freq_3rd': freq_3rd,
-            'freq_4th': freq_4th,
-            'freq_5th': freq_5th,
-            'freq_6th': freq_6th,
-            'freq_7th': freq_7th,
-            'freq_8th': freq_8th,
-            'freq_9th': freq_9th,
             'irms': irms,
             'pf': pf,
             'thd': thd,

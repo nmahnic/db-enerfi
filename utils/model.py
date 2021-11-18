@@ -46,17 +46,6 @@ class Measure(so.SQLObject):
     pf = so.FloatCol()
     thd = so.FloatCol()
     cos_phi = so.FloatCol()
-    freq_1st = so.FloatCol()
-    freq_2nd = so.FloatCol()
-    freq_1st = so.FloatCol()
-    freq_3rd = so.FloatCol()
-    freq_4th = so.FloatCol()
-    freq_5th = so.FloatCol()
-    freq_6th = so.FloatCol()
-    freq_7th = so.FloatCol()
-    freq_8th = so.FloatCol()
-    freq_9th = so.FloatCol()
-    freq_10th = so.FloatCol()
     dum = so.ForeignKey('Dum')
 
 
