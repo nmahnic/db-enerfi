@@ -8,9 +8,9 @@ For instance: we can list every user in the DB
 ```
 python3 client.py -l --user
 ```
-With main.py we can execute multiples clients
+With main.py we can execute multiples esp32Logger
 ```
-python3 main.py
+python3 launchLoggers.py
 ```
 
 ## User a virtual environment

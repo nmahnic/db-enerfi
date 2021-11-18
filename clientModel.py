@@ -95,7 +95,6 @@ class Client:
             'mac':mac,
             'active_power': active_power,
             'cos_phi': cos_phi,
-            'dumID': dumID,
             'irms': irms,
             'pf': pf,
             'thd': thd,

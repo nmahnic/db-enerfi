@@ -101,8 +101,7 @@ class measureList(Resource):
             model.Measure(
                 dum = dum,
                 active_power = args["active_power"],
-                cos_phi = args["active_power"],
-                dumID = args["active_power"],
+                cos_phi = args["cos_phi"],
                 irms = args["irms"],
                 pf = args["pf"],
                 thd = args["thd"],
