@@ -46,13 +46,7 @@ INSERT INTO meter (mac_address,user_id,dum_id) VALUES ('84-D8-1B-0C-5B-C1',*DumI
     {}
 */
 SELECT m.dum_id FROM meter AS m WHERE m.mac_address='84-D8-1B-0C-5B-C1';
-INSERT INTO measure (
-        dum_id,vrms,irms,
-        active_power,pf,thd,cos_phi
-    ) VALUES (
-        *DumId*,1.1,1.2,
-        1.3,0.9,0.8,0.1
-    );
+INSERT INTO measure (dum_id,vrms,irms,active_power,pf,thd,cos_phi) VALUES (*DumId*,1.1,1.2,1.3,0.9,0.8,0.1);
 
 
 -----------------------------------------------OTHER QUERYS-----------------------------------------------
