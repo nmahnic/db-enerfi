@@ -38,8 +38,7 @@ class Client:
         headers = {'content-type': 'application/json'}
         r = requests.post(URL, data=json.dumps(payload), headers=headers)
 
-        print(r.status_code)
-        pprint(r.json())
+        print(r.status_code, r.json())
         data = json.loads(r.text)
         return data
         # print(type(r.json()))
@@ -74,8 +73,7 @@ class Client:
         headers = {'content-type': 'application/json'}
         r = requests.post(URL, data=json.dumps(payload), headers=headers)
 
-        print(r.status_code)
-        pprint(r.json())
+        print(r.status_code, r.json())
         data = json.loads(r.text)
         return data
 
@@ -103,8 +101,7 @@ class Client:
         headers = {'content-type': 'application/json'}
         r = requests.post(URL, data=json.dumps(payload), headers=headers)
 
-        print(r.status_code)
-        pprint(r.json())
+        print(r.status_code, r.json())
         data = json.loads(r.text)
         return data
         # print(type(r.json()))

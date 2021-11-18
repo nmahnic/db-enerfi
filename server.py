@@ -78,10 +78,10 @@ class dumList(Resource):
                 dumID = dumId,
                 userID = args["userid"]
             )
-            return {'insert':'OK'},200
+            return {'message':'OK'},201
         else:
-            print("Exist DUM")
-            return {'insert':'DUM Exist'},200
+            print("DUM does exist")
+            return {'message':'DUM does exist'},405
 
 @api.resource('/measure/')
 class measureList(Resource):
@@ -95,8 +95,8 @@ class measureList(Resource):
         print(args)
         dum = model.findDumByMac(mac=args["mac"])
         if dum == None:
-            print("DumNOTExist")
-            return {'insert':'DumNOTExist'},200
+            print("DUM does not exist")
+            return {'message':'DUM does not exist'},405
         else:
             model.Measure(
                 dum = dum,
@@ -107,7 +107,7 @@ class measureList(Resource):
                 thd = args["thd"],
                 vrms = args["vrms"],
             )
-            return {'insert':'OK'},200
+            return {'message':'OK'},201
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
