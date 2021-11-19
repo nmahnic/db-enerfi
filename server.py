@@ -55,27 +55,17 @@ class user(Resource):
 class userPassword(Resource):
     def post(self):
         args = request.get_json()
-        password = args["password"].encode('utf-8')
-        userExist = model.findUser(
-                name = args["name"],
-                lastname = args["lastname"],
+        user = model.validUser(
+                passwd = args["passwd"],
                 email=args["email"]
             )
-        if userExist:
-            user = model.getUser(
-                name = args["name"],
-                lastname = args["lastname"],
-                email=args["email"]
-            )
-            if functions.check_password(password, user.password):
-                salt = user.salt
-                newpasswd = args["newpasswd"].encode('utf-8')
-                user.password  = (functions.get_hashed_password(newpasswd,salt))
-                return {'message':'Password updated'}, 202
-            else:
-                return {'message':'Invalid Password'}, 202
+        if user:
+            salt = user.salt
+            newpasswd = args["newpasswd"].encode('utf-8')
+            user.password  = (functions.get_hashed_password(newpasswd,salt))
+            return {'message':'Password updated'}, 202
         else:
-            return {'message':'User does not exist'}, 203
+            return {'message':'User is not valid'}, 203
 
  #####################    METER    ##################### 
 @api.resource('/meter/')

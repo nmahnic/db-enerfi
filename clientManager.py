@@ -62,12 +62,10 @@ if __name__ == '__main__':
             pass
     elif sys.argv[1] == '-m':
         if sys.argv[2] == '--user':
-            name = input("Ingrese nombre: ")
-            lastname = input("Ingrese lastname: ")
             mail = input("Ingrese mail: ")
             passwd = input("Ingrese passwd: ")
             newpasswd = input("Ingrese newpasswd: ")
-            Client.changePasswd(name,lastname,passwd,newpasswd,mail)
+            Client.changePasswd(mail,passwd,newpasswd)
 
         elif sys.argv[2] == '--dum':
             mail = input("Ingrese mail: ")

@@ -41,13 +41,11 @@ class Client:
         return data
         # print(type(r.json()))
 
-    def changePasswd(name,lastname,passwd,newpasswd,email):
+    def changePasswd(email,passwd,newpasswd):
         URL = 'http://localhost:5000/userpasswd/'
         payload = {
-            'name': name,
-            'lastname': lastname,
             'email': email,
-            'password': passwd,
+            'passwd': passwd,
             'newpasswd': newpasswd
         }
         headers = {'content-type': 'application/json'}
