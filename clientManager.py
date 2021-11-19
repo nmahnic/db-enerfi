@@ -70,18 +70,20 @@ if __name__ == '__main__':
             Client.changePasswd(name,lastname,passwd,newpasswd,mail)
 
         elif sys.argv[2] == '--dum':
-            userid = input("UserID :")
+            mail = input("Ingrese mail: ")
+            passwd = input("Ingrese passwd: ")
             omac = input("ingrese mac origen: ")
             dmac = input("ingrese mac destino: ")
-            Client.changeDumMeter(userid,omac,dmac)
+            Client.changeDumMeter(mail,passwd,omac,dmac)
         else:
             print("NOT IMPLEMENTED YET")
 
     elif sys.argv[1] == '-b':
         if sys.argv[2] == '--dum':
-            userid = input("UserID :")
+            mail = input("Ingrese mail: ")
+            passwd = input("Ingrese passwd: ")
             mac = input("ingrese mac: ")
-            Client.disableDumMeter(userid,mac)
+            Client.disableDumMeter(mail,passwd,mac)
         else:
             print("NOT IMPLEMENTED YET")
     elif sys.argv[1] == '-c':

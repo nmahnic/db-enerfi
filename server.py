@@ -141,11 +141,19 @@ class changedum(Resource):
         if meter == None:
             return {'message':'DUM does not exist with this MAC'},405
         else:
-            if (meter.user.id != int(args["userid"])):
-                return {'message':'User is not valid'},405
+            userValid = model.validUser(
+                    passwd = args["passwd"],
+                    email=args["email"]
+                )
+            if userValid:
+                if (meter.user.id != userValid.id):
+                    return {'message':'User is not valid'},405
+                else:
+                    meter.macAddress= args["dmac"]
+                    return {'message':'mac was updated'},200
             else:
-                meter.macAddress= args["dmac"]
-                return {'message':'mac was updated'},200
+                return {'message':'User is not valid'}, 203
+            
 
 
 @api.resource('/disabledum/')
@@ -156,11 +164,18 @@ class disabledum(Resource):
         if dum == None:
             return {'message':'DUM does not exist'},405
         else:
-            if (dum.user.id != int(args["userid"])):
-                return {'message':'User is not valid'},405
+            userValid = model.validUser(
+                    passwd = args["passwd"],
+                    email=args["email"]
+                )
+            if userValid:
+                if (dum.user.id != userValid.id):
+                    return {'message':'User is not valid'},405
+                else:
+                    dum.enable = False
+                    return {'message':'dum was deleted'},200
             else:
-                dum.enable = False
-                return {'message':'dum was deleted'},200
+                return {'message':'User is not valid'}, 203
 
 
 @api.resource('/listdumbyuser/')
@@ -180,7 +195,7 @@ class listdumbyuser(Resource):
 
   #####################    MEASURE    ##################### 
 @api.resource('/measure/')
-class measureList(Resource):
+class measure(Resource):
     def get(self):
         a = model.listAllmeasure()
         # print(a)
@@ -189,8 +204,8 @@ class measureList(Resource):
     def post(self):
         args = request.get_json()
         print(args)
-        meter = model.findMeterByMac(mac=args["mac"])
-        if meter == None:
+        dum = model.findDumByMac(mac=args["mac"])
+        if dum == None:
             return {'message':'DUM does not exist with this MAC'},405
         else:
             model.Measure(

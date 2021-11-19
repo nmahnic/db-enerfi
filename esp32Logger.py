@@ -28,7 +28,7 @@ if __name__ == '__main__':
     # chequeo de los argumentos de la linea de comandos
     if len(sys.argv) != 2:
         print("Error en la linea de comandos. Cantidad de argumentos erroneos")
-        print("python3 client.py B0-B2-8F-1D-4D-02")
+        print("python3 esp32Logger.py B0-B2-8F-1D-4D-02")
         sys.exit()
     else:
         s = sched.scheduler(time.time, time.sleep)  

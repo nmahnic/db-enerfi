@@ -115,10 +115,11 @@ class Client:
         data = json.loads(r.text)
         return data
 
-    def changeDumMeter(userid,omac,dmac):
+    def changeDumMeter(email,passwd,omac,dmac):
         URL = 'http://localhost:5000/changedum/'
         payload = {
-            'userid':userid,
+            'email':email,
+            'passwd':passwd,
             'omac':omac,
             'dmac':dmac
         }
@@ -129,9 +130,9 @@ class Client:
         data = json.loads(r.text)
         return data
 
-    def disableDumMeter(userid,mac):
+    def disableDumMeter(email,passwd,mac):
         URL = 'http://localhost:5000/disabledum/'
-        payload = {'userid':userid,'mac':mac}
+        payload = {'email':email,'passwd':passwd,'mac':mac}
         headers = {'content-type': 'application/json'}
         r = requests.post(URL, data=json.dumps(payload), headers=headers)
 
