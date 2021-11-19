@@ -2,6 +2,7 @@
 import sqlobject as so
 import os
 import defs
+import functions
 
 # uri = "mysql://{}:{}@{}/{}".format(defs.USER,defs.PASSWORD,defs.HOST,defs.DBASE)
 # print(uri)
@@ -103,6 +104,19 @@ def findUser(name,lastname,email):
     else:
         return False
 
+def validUser(email, passwd):
+    query = User.selectBy(email=email)
+    passwd = passwd.encode('utf-8')
+    if query.count() != 0:
+        user = query.getOne()
+        if functions.check_password(passwd, user.password):
+            return user
+        else:
+            return None
+        
+    else:
+        return None
+
 def getUser(name,lastname,email):
     query = User.selectBy(
         name=name,
@@ -134,3 +148,19 @@ def listAllmeasure():
     measures = Measure.select()
     d = [to_dict(measure) for measure in measures]
     return d
+
+def listMeterByUser(userValid):
+    meters = Meter.selectBy(userID=userValid.id)
+    if meters.count() != 0:
+        d = [to_dict(meter) for meter in meters]
+        return d  
+    else:
+        return None
+
+def listDumByUser(userValid):
+    dums = Dum.selectBy(userID=userValid.id)
+    if dums.count() != 0:
+        d = [to_dict(dum) for dum in dums]
+        return d 
+    else:
+        return None

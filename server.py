@@ -85,6 +85,20 @@ class meter(Resource):
         # print(a)
         return jsonify(a)
 
+@api.resource('/listmeterbyuser/')
+class listmeterbyuser(Resource):
+    def post(self):
+        args = request.get_json()
+        userValid = model.validUser(
+                passwd = args["passwd"],
+                email=args["email"]
+            )
+        if userValid:
+            meters = model.listMeterByUser(userValid)
+            return jsonify(meters)
+        else:
+            return {'message':'User is not valid'}, 203
+
  #####################    DUM    ##################### 
 @api.resource('/dum/')
 class dum(Resource):
@@ -97,18 +111,23 @@ class dum(Resource):
         meter = model.findMeterByMac(mac=args["mac"])
         if meter == None:
 
-            if model.finderUserByID(args["userid"]) == None:
-                return {'message':'User does not exist'},405
+            userValid = model.validUser(
+                    passwd = args["passwd"],
+                    email=args["email"]
+                )
+            if userValid == None:
+                return {'message':'User is not valid'}, 203
             else:
                 model.Dum(
                     name= args["name"],
-                    userID = args["userid"]
+                    userID = userValid.id,
+                    enable = True
                 )
                 dumId = model.findLastDumIdGenerated()
                 model.Meter(
                     macAddress= args["mac"],
                     dumID = dumId,
-                    userID = args["userid"]
+                    userID = userValid.id
                 )
                 return {'message':'DUM and Meter created'},201
         else:
@@ -142,6 +161,21 @@ class disabledum(Resource):
             else:
                 dum.enable = False
                 return {'message':'dum was deleted'},200
+
+
+@api.resource('/listdumbyuser/')
+class listdumbyuser(Resource):
+    def post(self):
+        args = request.get_json()
+        userValid = model.validUser(
+                passwd = args["passwd"],
+                email=args["email"]
+            )
+        if userValid:
+            dums = model.listDumByUser(userValid)
+            return jsonify(dums)
+        else:
+            return {'message':'User is not valid'}, 203
 
 
   #####################    MEASURE    ##################### 

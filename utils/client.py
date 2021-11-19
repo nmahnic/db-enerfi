@@ -25,13 +25,13 @@ class Client:
         return data
         # print(type(r.json()))
 
-    def addUser(name,lastname,password,mail):
+    def addUser(name,lastname,password,email):
         URL = 'http://localhost:5000/user/'
         payload = {
             'name': name,
             'password': password,
             'lastname': lastname,
-            'email':mail
+            'email':email
         }
         headers = {'content-type': 'application/json'}
         r = requests.post(URL, data=json.dumps(payload), headers=headers)
@@ -41,12 +41,12 @@ class Client:
         return data
         # print(type(r.json()))
 
-    def changePasswd(name,lastname,passwd,newpasswd,mail):
+    def changePasswd(name,lastname,passwd,newpasswd,email):
         URL = 'http://localhost:5000/userpasswd/'
         payload = {
             'name': name,
             'lastname': lastname,
-            'email': mail,
+            'email': email,
             'password': passwd,
             'newpasswd': newpasswd
         }
@@ -68,6 +68,16 @@ class Client:
         data = json.loads(r.text)
         return data
         # print(type(r.json()))
+    
+    def listDumByUser(email,passwd):
+        URL = 'http://localhost:5000/listdumbyuser/'
+        payload = {'passwd':passwd, 'email':email}
+        headers = {'content-type': 'application/json'}
+        r = requests.post(URL, data=json.dumps(payload), headers=headers)
+
+        print(r.status_code, r.json())
+        data = json.loads(r.text)
+        return data
 
  #####################    METER    ##################### 
     def listmeter():
@@ -80,10 +90,21 @@ class Client:
         return data
         # print(type(r.json()))
 
-    def addDumMeter(userid,name,mac):
+    def listMeterByUser(email,passwd):
+        URL = 'http://localhost:5000/listmeterbyuser/'
+        payload = {'passwd':passwd, 'email':email}
+        headers = {'content-type': 'application/json'}
+        r = requests.post(URL, data=json.dumps(payload), headers=headers)
+
+        print(r.status_code, r.json())
+        data = json.loads(r.text)
+        return data
+
+    def addDumMeter(email,passwd,name,mac):
         URL = 'http://localhost:5000/dum/'
         payload = {
-            'userid':userid,
+            'email':email,
+            'passwd':passwd,
             'name':name,
             'mac':mac
         }

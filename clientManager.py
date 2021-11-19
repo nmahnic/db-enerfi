@@ -42,10 +42,11 @@ if __name__ == '__main__':
             
         elif sys.argv[2] == '--dum' or sys.argv[2] == '--meter':
             print("'-a --dum' o '-a --meter' es lo mismo")
-            userid = input("UserID: ")
+            mail = input("Ingrese mail: ")
+            passwd = input("Ingrese passwd: ")
             name = input("Ingres nombre del DUM: ")
             mac = input("ingrese mac: ")
-            Client.addDumMeter(userid,name,mac)
+            Client.addDumMeter(mail,passwd,name,mac)
 
         elif sys.argv[2] == '--measure':
             mac = input("Ingrese mac: ")
@@ -68,7 +69,7 @@ if __name__ == '__main__':
             newpasswd = input("Ingrese newpasswd: ")
             Client.changePasswd(name,lastname,passwd,newpasswd,mail)
 
-        if sys.argv[2] == '--dum':
+        elif sys.argv[2] == '--dum':
             userid = input("UserID :")
             omac = input("ingrese mac origen: ")
             dmac = input("ingrese mac destino: ")
@@ -84,6 +85,16 @@ if __name__ == '__main__':
         else:
             print("NOT IMPLEMENTED YET")
     elif sys.argv[1] == '-c':
-        print("NOT IMPLEMENTED YET")
+        if sys.argv[2] == '--dum':
+            mail = input("Ingrese mail: ")
+            passwd = input("Ingrese passwd: ")
+            Client.listDumByUser(mail,passwd)
+
+        elif sys.argv[2] == '--meter':
+            mail = input("Ingrese mail: ")
+            passwd = input("Ingrese passwd: ")
+            Client.listMeterByUser(mail,passwd)
+        else:
+            print("NOT IMPLEMENTED YET")
     else:
         pass
