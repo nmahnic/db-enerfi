@@ -21,8 +21,9 @@ class getMeasureByDum(Resource):
         # print(a)
         return jsonify(a)
 
+ #####################    USER    ##################### 
 @api.resource('/user/')
-class userList(Resource):
+class user(Resource):
     def get(self):
         a = model.listAlluser()
         # print(a)
@@ -45,15 +46,39 @@ class userList(Resource):
             print("POST ->", args)
             return args, 201
 
+@api.resource('/userpasswd/')
+class userPassword(Resource):
+    def post(self):
+        args = request.get_json()
+    
+        userExist = model.findUser(
+            name=args["name"],
+            lastname=args["lastname"],
+            password=args["password"]
+        )
+        if userExist:
+            passUpdated = model.updataPasswd(
+                name=args["name"],
+                lastname=args["lastname"],
+                password=args["password"],
+                newpasswd=args["newpasswd"]
+            )
+            if passUpdated:
+                return {'message':'Password updated'}, 202
+            else:
+                return {'message':'Password was not update'}, 203
+        else:
+            return {'message':'User does not exist'}, 203
 
+ #####################    METER    ##################### 
 @api.resource('/meter/')
-class meterList(Resource):
+class meter(Resource):
     def get(self):
         a = model.listAllmeter()
         # print(a)
         return jsonify(a)
 
-
+ #####################    DUM    ##################### 
 @api.resource('/dum/')
 class dumList(Resource):
     def get(self):
@@ -79,6 +104,7 @@ class dumList(Resource):
             print("DUM does exist")
             return {'message':'DUM does exist'},405
 
+  #####################    MEASURE    ##################### 
 @api.resource('/measure/')
 class measureList(Resource):
     def get(self):

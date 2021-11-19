@@ -89,6 +89,19 @@ def findUser(name,lastname,password):
     else:
         return False
 
+def updataPasswd(name,lastname,password,newpasswd):
+    query = User.selectBy(
+        name=name,
+        lastname=lastname,
+        password=password
+    )
+    if query.count() != 0:
+        print(query.getOne())
+        query.getOne().password = newpasswd
+        return True
+    else:
+        return False
+
 
 def listAlluser():
     users = User.select()

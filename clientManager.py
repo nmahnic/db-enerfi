@@ -60,9 +60,17 @@ if __name__ == '__main__':
             Client.addMeasure(mac,active_power,cos_phi,dumID,irms,pf,thd,vrms)
         else:
             pass
-    elif sys.argv[1] == '-b':
-        print("NOT IMPLEMENTED YET")
     elif sys.argv[1] == '-m':
+        if sys.argv[2] == '--user':
+            name = input("Ingrese nombre: ")
+            lastname = input("Ingrese lastname: ")
+            passwd = input("Ingrese passwd: ")
+            newpasswd = input("Ingrese newpasswd: ")
+            Client.changePasswd(name,lastname,passwd,newpasswd)
+
+        else:
+            print("NOT IMPLEMENTED YET")
+    elif sys.argv[1] == '-b':
         print("NOT IMPLEMENTED YET")
     elif sys.argv[1] == '-c':
         print("NOT IMPLEMENTED YET")
