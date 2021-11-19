@@ -87,7 +87,7 @@ class meter(Resource):
 
  #####################    DUM    ##################### 
 @api.resource('/dum/')
-class dumList(Resource):
+class dum(Resource):
     def get(self):
         a = model.listAlldum()
         # print(a)
@@ -112,8 +112,22 @@ class dumList(Resource):
                 )
                 return {'message':'DUM and Meter created'},201
         else:
-            print("DUM already exist")
             return {'message':'DUM already exist'},405
+
+@api.resource('/changedum/')
+class changedum(Resource):
+    def post(self):
+        args = request.get_json()
+        dum = model.findDumByMac(mac=args["omac"])
+        if dum == None:
+            return {'message':'DUM does not exist'},405
+        else:
+            if (dum.user.id != int(args["userid"])):
+                return {'message':'User is not valid'},405
+            else:
+                dum.macAddress= args["dmac"]
+                return {'message':'DUM already exist and User is valid'},200
+
 
   #####################    MEASURE    ##################### 
 @api.resource('/measure/')

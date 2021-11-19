@@ -94,6 +94,19 @@ class Client:
         data = json.loads(r.text)
         return data
 
+    def changeDumMeter(userid,omac,dmac):
+        URL = 'http://localhost:5000/changedum/'
+        payload = {
+            'userid':userid,
+            'omac':omac,
+            'dmac':dmac
+        }
+        headers = {'content-type': 'application/json'}
+        r = requests.post(URL, data=json.dumps(payload), headers=headers)
+
+        print(r.status_code, r.json())
+        data = json.loads(r.text)
+        return data
  #####################    MEASURE    ##################### 
     def listMeasure():
         URL = 'http://localhost:5000/measure/'
