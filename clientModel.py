@@ -26,14 +26,12 @@ class Client:
         return data
         # print(type(r.json()))
 
-    def addUser(name,surname,mail,password,usernick):
+    def addUser(name,lastname,password):
         URL = 'http://localhost:5000/user/'
         payload = {
-            'mail': mail,
             'name': name,
             'password': password,
-            'surname': surname,
-            'usernick': usernick
+            'lastname': lastname
         }
         headers = {'content-type': 'application/json'}
         r = requests.post(URL, data=json.dumps(payload), headers=headers)

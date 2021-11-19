@@ -14,11 +14,8 @@ class User(so.SQLObject):
     class sqlmeta:
         table = "user"
     name = so.StringCol(length=50, varchar=True)
-    surname = so.StringCol(length=50, varchar=True)
-    surname = so.StringCol(length=50, varchar=True)
-    usernick = so.StringCol(length=50, varchar=True)
+    lastname = so.StringCol(length=50, varchar=True)
     password = so.StringCol(length=50, varchar=True)
-    mail = so.StringCol(length=50, varchar=True)
 
 class Dum(so.SQLObject):
     class sqlmeta:
@@ -80,13 +77,11 @@ def findDumByMac(mac):
     else:
         return None
 
-def findUser(name,surname,usernick,password,mail):
+def findUser(name,lastname,password):
     query = User.selectBy(
         name=name,
-        surname=surname,
-        usernick=usernick,
-        password=password,
-        mail=mail
+        lastname=lastname,
+        password=password
     )
     if query.count() != 0:
         print(query.getOne())

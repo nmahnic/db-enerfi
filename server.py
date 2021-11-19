@@ -31,20 +31,16 @@ class userList(Resource):
         args = request.get_json()
         userExist = model.findUser(
             name=args["name"],
-            surname=args["surname"],
-            usernick=args["usernick"],
-            password=args["password"],
-            mail=args["mail"],
+            lastname=args["lastname"],
+            password=args["password"]
         )
         if userExist:
             return args, 202
         else:
             model.User(
                 name=args["name"],
-                surname=args["surname"],
-                usernick=args["usernick"],
-                password=args["password"],
-                mail=args["mail"],
+                lastname=args["lastname"],
+                password=args["password"]
             )
             print("POST ->", args)
             return args, 201

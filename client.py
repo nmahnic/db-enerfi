@@ -33,12 +33,10 @@ if __name__ == '__main__':
     elif sys.argv[1] == '-a':
         if sys.argv[2] == '--user':
             name = input("Ingrese nombre: ")
-            # surname = input("Ingrese surname: ")
-            # mail = input("Ingrese mail: ")
+            # lastname = input("Ingrese lastname: ")
             # password = input("Ingrese password: ")
-            # usernick = input("Ingrese usernick: ")
-            # Client.addUser(name,surname,mail,password,usernick)
-            Client.addUser(name,"lopez","hlopez@gmail.com","1234","huguito")
+            # Client.addUser(name,lastname,password)
+            Client.addUser(name,"lopez","1234")
             
         elif sys.argv[2] == '--dum' or sys.argv[2] == '--meter':
             print("'-a --dum' o '-a --meter' es lo mismo")
