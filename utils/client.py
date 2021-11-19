@@ -25,12 +25,13 @@ class Client:
         return data
         # print(type(r.json()))
 
-    def addUser(name,lastname,password):
+    def addUser(name,lastname,password,mail):
         URL = 'http://localhost:5000/user/'
         payload = {
             'name': name,
             'password': password,
-            'lastname': lastname
+            'lastname': lastname,
+            'email':mail
         }
         headers = {'content-type': 'application/json'}
         r = requests.post(URL, data=json.dumps(payload), headers=headers)
@@ -40,11 +41,12 @@ class Client:
         return data
         # print(type(r.json()))
 
-    def changePasswd(name,lastname,passwd,newpasswd):
+    def changePasswd(name,lastname,passwd,newpasswd,mail):
         URL = 'http://localhost:5000/userpasswd/'
         payload = {
             'name': name,
             'lastname': lastname,
+            'email': mail,
             'password': passwd,
             'newpasswd': newpasswd
         }

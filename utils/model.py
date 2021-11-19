@@ -15,7 +15,11 @@ class User(so.SQLObject):
         table = "user"
     name = so.StringCol(length=50, varchar=True)
     lastname = so.StringCol(length=50, varchar=True)
-    password = so.StringCol(length=50, varchar=True)
+    email = so.StringCol(length=50, varchar=True)
+    # password = so.StringCol(length=50, varchar=True)
+    password = so.BLOBCol()
+    # salt = so.StringCol(length=50, varchar=True)
+    salt = so.BLOBCol()
 
 class Dum(so.SQLObject):
     class sqlmeta:
@@ -77,11 +81,11 @@ def findDumByMac(mac):
     else:
         return None
 
-def findUser(name,lastname,password):
+def findUser(name,lastname,email):
     query = User.selectBy(
         name=name,
         lastname=lastname,
-        password=password
+        email=email
     )
     if query.count() != 0:
         print(query.getOne())
@@ -89,19 +93,16 @@ def findUser(name,lastname,password):
     else:
         return False
 
-def updataPasswd(name,lastname,password,newpasswd):
+def getUser(name,lastname,email):
     query = User.selectBy(
         name=name,
         lastname=lastname,
-        password=password
+        email=email
     )
     if query.count() != 0:
-        print(query.getOne())
-        query.getOne().password = newpasswd
-        return True
-    else:
-        return False
-
+        return query.getOne()
+    else: 
+        return None
 
 def listAlluser():
     users = User.select()

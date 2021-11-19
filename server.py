@@ -10,6 +10,7 @@ sys.path.insert(0, os.getcwd()+'/utils')
 from flask import Flask, jsonify, request
 from flask_restful import Resource, Api
 import model
+import functions
 
 app = Flask(__name__)
 api = Api(app)
@@ -25,48 +26,54 @@ class getMeasureByDum(Resource):
 @api.resource('/user/')
 class user(Resource):
     def get(self):
-        a = model.listAlluser()
-        # print(a)
+        users = model.listAlluser()
+        a = [{'name':user['name'],'lastname':user['lastname'],'email':user['email'],'password':str(user['password']),'salt':str(user['salt']),} for user in users]
         return jsonify(a)
     def post(self):
         args = request.get_json()
         userExist = model.findUser(
-            name=args["name"],
-            lastname=args["lastname"],
-            password=args["password"]
-        )
+                name = args["name"],
+                lastname = args["lastname"],
+                email=args["email"]
+            )
         if userExist:
-            return args, 202
+            return {'message':'User already exist'}, 405
         else:
+            salt = functions.generate_salt()
+            password = args["password"].encode('utf-8')
             model.User(
-                name=args["name"],
-                lastname=args["lastname"],
-                password=args["password"]
+                name= args["name"],
+                lastname= args["lastname"],
+                password= (functions.get_hashed_password(password,salt)),
+                email= args["email"],
+                salt= (salt)
             )
             print("POST ->", args)
-            return args, 201
+            return {'message':'User created'}, 201
 
 @api.resource('/userpasswd/')
 class userPassword(Resource):
     def post(self):
         args = request.get_json()
-    
+        password = args["password"].encode('utf-8')
         userExist = model.findUser(
-            name=args["name"],
-            lastname=args["lastname"],
-            password=args["password"]
-        )
-        if userExist:
-            passUpdated = model.updataPasswd(
-                name=args["name"],
-                lastname=args["lastname"],
-                password=args["password"],
-                newpasswd=args["newpasswd"]
+                name = args["name"],
+                lastname = args["lastname"],
+                email=args["email"]
             )
-            if passUpdated:
+        if userExist:
+            user = model.getUser(
+                name = args["name"],
+                lastname = args["lastname"],
+                email=args["email"]
+            )
+            if functions.check_password(password, user.password):
+                salt = user.salt
+                newpasswd = args["newpasswd"].encode('utf-8')
+                user.password  = (functions.get_hashed_password(newpasswd,salt))
                 return {'message':'Password updated'}, 202
             else:
-                return {'message':'Password was not update'}, 203
+                return {'message':'Invalid Password'}, 202
         else:
             return {'message':'User does not exist'}, 203
 

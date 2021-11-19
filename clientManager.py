@@ -38,8 +38,7 @@ if __name__ == '__main__':
             pass
     elif sys.argv[1] == '-a':
         if sys.argv[2] == '--user':
-            name = input("Ingrese nombre: ")
-            Client.addUser(name,"lopez","1234")
+            print("Use addUser.py")
             
         elif sys.argv[2] == '--dum' or sys.argv[2] == '--meter':
             print("'-a --dum' o '-a --meter' es lo mismo")
@@ -64,9 +63,10 @@ if __name__ == '__main__':
         if sys.argv[2] == '--user':
             name = input("Ingrese nombre: ")
             lastname = input("Ingrese lastname: ")
+            mail = input("Ingrese mail: ")
             passwd = input("Ingrese passwd: ")
             newpasswd = input("Ingrese newpasswd: ")
-            Client.changePasswd(name,lastname,passwd,newpasswd)
+            Client.changePasswd(name,lastname,passwd,newpasswd,mail)
 
         else:
             print("NOT IMPLEMENTED YET")

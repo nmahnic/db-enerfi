@@ -14,6 +14,6 @@ if __name__ == '__main__':
         print("python3 client.py Nicolas Lopez")
         sys.exit()
 
-
+    mail = input("Ingrese mail: ")
     password = input("Ingrese password: ")
-    Client.addUser(sys.argv[1],sys.argv[2],password)
+    Client.addUser(sys.argv[1],sys.argv[2],password,mail)
