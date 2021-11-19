@@ -219,8 +219,11 @@ class listmeasurebyuser(Resource):
             )
         if userValid:
             dum = model.findDumByMac(mac=args["mac"])
-            measures = model.listMeasureByUser(dum)
-            return jsonify(measures)
+            if(dum.enable == False):
+                return {'message':'This DUM was deleted'}, 203 
+            else:
+                measures = model.listMeasureByUser(dum)
+                return jsonify(measures)
         else:
             return {'message':'User is not valid'}, 203
 
