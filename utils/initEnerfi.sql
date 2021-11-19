@@ -102,5 +102,3 @@ INSERT INTO dum (user_id,name) VALUES (5, 'Computadora');
 INSERT INTO meter (mac_address,user_id,dum_id) VALUES ('84-D8-1B-0C-5B-C1',1,1);
 INSERT INTO meter (mac_address,user_id,dum_id) VALUES ('B0-B2-8F-1D-4D-02',1,2);
 INSERT INTO measure (dum_id,vrms,irms,active_power,pf,thd,cos_phi) VALUES (1,1.1,1.2,1.3,0.9,0.8,0.1);
-INSERT INTO measure (dum_id,vrms,irms,active_power,pf,thd,cos_phi) VALUES (1,1.1,1.2,1.3,0.9,0.8,0.1);
-INSERT INTO measure (dum_id,vrms,irms,active_power,pf,thd,cos_phi) VALUES (2,1.1,1.2,1.3,0.9,0.8,0.1);

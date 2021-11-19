@@ -1,19 +1,25 @@
-#!/usr/bin/env python
+# importing sys
 import sys
-from clientModel import Client
+import os
+  
+# adding Folder_2 to the system path
+sys.path.insert(0, os.getcwd()+'/utils')
+
+from client import Client
 import sched, time
-import datetime
+import datetime 
+import random
 
 
 def logMeasurese(sc):
     print("REQUEST: ",datetime.datetime.now())
-    active_power = 1.4
-    cos_phi = .4
-    dumID = .5
-    irms = .5
-    pf = .5
-    thd = .5
-    vrms = .5
+    active_power = round(random.uniform(100, 4000),2)
+    cos_phi = round(random.random(),2)
+    dumID = round(random.random(),2)
+    pf = round(random.random(),2)
+    thd = round(random.random(),2)
+    vrms = round(random.uniform(180, 240),2)
+    irms = round(random.uniform(1, 10),2)
     Client.addMeasure(sys.argv[1],active_power,cos_phi,dumID,irms,pf,thd,vrms)
     s.enter(2,1, logMeasurese, (sc,))
 

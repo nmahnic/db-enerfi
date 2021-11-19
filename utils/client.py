@@ -1,5 +1,4 @@
 import requests
-import urllib.parse
 from pprint import pprint
 import json
 

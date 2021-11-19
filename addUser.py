@@ -1,5 +1,11 @@
+# importing sys
 import sys
-from clientModel import Client
+import os
+  
+# adding Folder_2 to the system path
+sys.path.insert(0, os.getcwd()+'/utils')
+
+from client import Client
 
 if __name__ == '__main__':
     # chequeo de los argumentos de la linea de comandos

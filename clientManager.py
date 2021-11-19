@@ -1,6 +1,12 @@
-#!/usr/bin/env python
+# importing sys
 import sys
-from clientModel import Client
+import os
+  
+# adding Folder_2 to the system path
+sys.path.insert(0, os.getcwd()+'/utils')
+
+from client import Client
+import random
 
 if __name__ == '__main__':
     # chequeo de los argumentos de la linea de comandos
@@ -33,9 +39,6 @@ if __name__ == '__main__':
     elif sys.argv[1] == '-a':
         if sys.argv[2] == '--user':
             name = input("Ingrese nombre: ")
-            # lastname = input("Ingrese lastname: ")
-            # password = input("Ingrese password: ")
-            # Client.addUser(name,lastname,password)
             Client.addUser(name,"lopez","1234")
             
         elif sys.argv[2] == '--dum' or sys.argv[2] == '--meter':
@@ -47,13 +50,13 @@ if __name__ == '__main__':
 
         elif sys.argv[2] == '--measure':
             mac = input("Ingrese mac: ")
-            active_power = 1.4
-            cos_phi = .4
-            dumID = .5
-            irms = .5
-            pf = .5
-            thd = .5
-            vrms = .5
+            active_power = round(random.uniform(100, 4000),2)
+            cos_phi = round(random.random(),2)
+            dumID = round(random.random(),2)
+            pf = round(random.random(),2)
+            thd = round(random.random(),2)
+            vrms = round(random.uniform(180, 240),2)
+            irms = round(random.uniform(1, 10),2)
             Client.addMeasure(mac,active_power,cos_phi,dumID,irms,pf,thd,vrms)
         else:
             pass
