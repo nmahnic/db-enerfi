@@ -107,6 +107,16 @@ class Client:
         print(r.status_code, r.json())
         data = json.loads(r.text)
         return data
+
+    def disableDumMeter(userid,mac):
+        URL = 'http://localhost:5000/disabledum/'
+        payload = {'userid':userid,'mac':mac}
+        headers = {'content-type': 'application/json'}
+        r = requests.post(URL, data=json.dumps(payload), headers=headers)
+
+        print(r.status_code, r.json())
+        data = json.loads(r.text)
+        return data
  #####################    MEASURE    ##################### 
     def listMeasure():
         URL = 'http://localhost:5000/measure/'

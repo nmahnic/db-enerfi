@@ -75,8 +75,14 @@ if __name__ == '__main__':
             Client.changeDumMeter(userid,omac,dmac)
         else:
             print("NOT IMPLEMENTED YET")
+
     elif sys.argv[1] == '-b':
-        print("NOT IMPLEMENTED YET")
+        if sys.argv[2] == '--dum':
+            userid = input("UserID :")
+            mac = input("ingrese mac: ")
+            Client.disableDumMeter(userid,mac)
+        else:
+            print("NOT IMPLEMENTED YET")
     elif sys.argv[1] == '-c':
         print("NOT IMPLEMENTED YET")
     else:

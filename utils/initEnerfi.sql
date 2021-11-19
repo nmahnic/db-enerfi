@@ -50,6 +50,7 @@ CREATE TABLE dum
     id INT NOT NULL AUTO_INCREMENT,
     user_id INT,
     name VARCHAR(50),
+    enable BOOLEAN DEFAULT true,
     CONSTRAINT PK_dum PRIMARY KEY  (id)
 );
 

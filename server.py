@@ -94,8 +94,8 @@ class dum(Resource):
         return jsonify(a)
     def post(self):
         args = request.get_json()
-        dum = model.findDumByMac(mac=args["mac"])
-        if dum == None:
+        meter = model.findMeterByMac(mac=args["mac"])
+        if meter == None:
 
             if model.finderUserByID(args["userid"]) == None:
                 return {'message':'User does not exist'},405
@@ -118,15 +118,30 @@ class dum(Resource):
 class changedum(Resource):
     def post(self):
         args = request.get_json()
-        dum = model.findDumByMac(mac=args["omac"])
+        meter = model.findMeterByMac(mac=args["omac"])
+        if meter == None:
+            return {'message':'DUM does not exist with this MAC'},405
+        else:
+            if (meter.user.id != int(args["userid"])):
+                return {'message':'User is not valid'},405
+            else:
+                meter.macAddress= args["dmac"]
+                return {'message':'mac was updated'},200
+
+
+@api.resource('/disabledum/')
+class disabledum(Resource):
+    def post(self):
+        args = request.get_json()
+        dum = model.findDumByMac(mac=args["mac"])
         if dum == None:
             return {'message':'DUM does not exist'},405
         else:
             if (dum.user.id != int(args["userid"])):
                 return {'message':'User is not valid'},405
             else:
-                dum.macAddress= args["dmac"]
-                return {'message':'DUM already exist and User is valid'},200
+                dum.enable = False
+                return {'message':'dum was deleted'},200
 
 
   #####################    MEASURE    ##################### 
@@ -140,10 +155,9 @@ class measureList(Resource):
     def post(self):
         args = request.get_json()
         print(args)
-        dum = model.findDumByMac(mac=args["mac"])
-        if dum == None:
-            print("DUM does not exist")
-            return {'message':'DUM does not exist'},405
+        meter = model.findMeterByMac(mac=args["mac"])
+        if meter == None:
+            return {'message':'DUM does not exist with this MAC'},405
         else:
             model.Measure(
                 dum = dum,

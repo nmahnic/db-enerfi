@@ -26,6 +26,7 @@ class Dum(so.SQLObject):
         table = "dum"
     user = so.ForeignKey('User')
     name = so.StringCol(length=50, varchar=True)
+    enable = so.BoolCol()
     measures = so.MultipleJoin('Measure')
 
 class Meter(so.SQLObject):
@@ -73,6 +74,17 @@ def finderUserByID(id):
         return None
 
 def findDumByMac(mac):
+    queryMeter = Meter.selectBy(macAddress=mac)
+    if queryMeter.count() != 0:
+        queryDum = Dum.selectBy(id=queryMeter[0].dumID)
+        if queryDum.count() != 0:
+            return queryDum[0]
+        else:
+            return None
+    else:
+        return None
+
+def findMeterByMac(mac):
     queryMeter = Meter.selectBy(macAddress=mac)
     if queryMeter.count() != 0:
         return queryMeter[0]
