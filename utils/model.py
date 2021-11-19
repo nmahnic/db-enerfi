@@ -164,3 +164,12 @@ def listDumByUser(userValid):
         return d 
     else:
         return None
+
+
+def listMeasureByUser(dum):
+    measures = Measure.selectBy(dumID=dum.id)
+    if measures.count() != 0:
+        d = [to_dict(measure) for measure in measures]
+        return d  
+    else:
+        return None

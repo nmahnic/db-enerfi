@@ -96,6 +96,12 @@ if __name__ == '__main__':
             mail = input("Ingrese mail: ")
             passwd = input("Ingrese passwd: ")
             Client.listMeterByUser(mail,passwd)
+
+        elif sys.argv[2] == '--measure':
+            mail = input("Ingrese mail: ")
+            passwd = input("Ingrese passwd: ")
+            mac = input("ingrese mac: ")
+            Client.listMeasureByUser(mail,passwd,mac)
         else:
             print("NOT IMPLEMENTED YET")
     else:

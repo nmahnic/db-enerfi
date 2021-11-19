@@ -219,5 +219,20 @@ class measure(Resource):
             )
             return {'message':'OK'},201
 
+@api.resource('/listmeasurebyuser/')
+class listmeasurebyuser(Resource):
+    def post(self):
+        args = request.get_json()
+        userValid = model.validUser(
+                passwd = args["passwd"],
+                email=args["email"]
+            )
+        if userValid:
+            dum = model.findDumByMac(mac=args["mac"])
+            measures = model.listMeasureByUser(dum)
+            return jsonify(measures)
+        else:
+            return {'message':'User is not valid'}, 203
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0')

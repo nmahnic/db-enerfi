@@ -168,3 +168,13 @@ class Client:
         data = json.loads(r.text)
         return data
         # print(type(r.json()))
+    
+    def listMeasureByUser(email,passwd,mac):
+        URL = 'http://localhost:5000/listmeasurebyuser/'
+        payload = {'passwd':passwd, 'email':email, 'mac':mac}
+        headers = {'content-type': 'application/json'}
+        r = requests.post(URL, data=json.dumps(payload), headers=headers)
+
+        print(r.status_code, r.json())
+        data = json.loads(r.text)
+        return data
