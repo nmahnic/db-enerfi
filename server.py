@@ -96,20 +96,24 @@ class dumList(Resource):
         args = request.get_json()
         dum = model.findDumByMac(mac=args["mac"])
         if dum == None:
-            model.Dum(
-                name= args["name"],
-                userID = args["userid"]
-            )
-            dumId = model.findLastDumIdGenerated()
-            model.Meter(
-                macAddress= args["mac"],
-                dumID = dumId,
-                userID = args["userid"]
-            )
-            return {'message':'OK'},201
+
+            if model.finderUserByID(args["userid"]) == None:
+                return {'message':'User does not exist'},405
+            else:
+                model.Dum(
+                    name= args["name"],
+                    userID = args["userid"]
+                )
+                dumId = model.findLastDumIdGenerated()
+                model.Meter(
+                    macAddress= args["mac"],
+                    dumID = dumId,
+                    userID = args["userid"]
+                )
+                return {'message':'DUM and Meter created'},201
         else:
-            print("DUM does exist")
-            return {'message':'DUM does exist'},405
+            print("DUM already exist")
+            return {'message':'DUM already exist'},405
 
   #####################    MEASURE    ##################### 
 @api.resource('/measure/')

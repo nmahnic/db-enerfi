@@ -64,15 +64,13 @@ def to_dict(obj):
 def findLastDumIdGenerated():
     return Dum.select().count()
 
-def finder(name):
-    query = User.selectBy(name=name).getOne()
-    d = to_dict(query)
-    return d
 
 def finderUserByID(id):
-    query = User.selectBy(id=id).getOne()
-    d = to_dict(query)
-    return d
+    query = User.selectBy(id=id)
+    if query.count() != 0:
+        return query[0]
+    else:
+        return None
 
 def findDumByMac(mac):
     queryMeter = Meter.selectBy(macAddress=mac)
