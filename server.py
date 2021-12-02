@@ -27,7 +27,7 @@ class getMeasureByDum(Resource):
 class user(Resource):
     def get(self):
         users = model.listAlluser()
-        a = [{'name':user['name'],'lastname':user['lastname'],'email':user['email'],'password':str(user['password']),'salt':str(user['salt']),} for user in users]
+        a = [{'name':user['name'],'lastname':user['lastname'],'email':user['email'],'password':str(user['password'])} for user in users]
         return jsonify(a)
     def post(self):
         args = request.get_json()
@@ -45,8 +45,7 @@ class user(Resource):
                 name= args["name"],
                 lastname= args["lastname"],
                 password= (functions.get_hashed_password(password,salt)),
-                email= args["email"],
-                salt= (salt)
+                email= args["email"]
             )
             print("POST ->", args)
             return {'message':'User created'}, 201
@@ -60,7 +59,7 @@ class userPassword(Resource):
                 email=args["email"]
             )
         if user:
-            salt = user.salt
+            salt = functions.generate_salt()
             newpasswd = args["newpasswd"].encode('utf-8')
             user.password  = (functions.get_hashed_password(newpasswd,salt))
             return {'message':'Password updated'}, 202
@@ -193,7 +192,7 @@ class measure(Resource):
 
     def post(self):
         args = request.get_json()
-        print(args)
+        #print(args)
         dum = model.findDumByMac(mac=args["mac"])
         if dum == None:
             return {'message':'DUM does not exist with this MAC'},405

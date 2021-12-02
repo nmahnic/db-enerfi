@@ -31,7 +31,6 @@ CREATE TABLE user
     lastname VARCHAR(50) NOT NULL,
     email VARCHAR(50) NOT NULL,
     password VARCHAR(256) NOT NULL,
-    salt VARCHAR(256),
 
     CONSTRAINT PK_user PRIMARY KEY  (id)
 );

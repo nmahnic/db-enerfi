@@ -20,7 +20,7 @@ class User(so.SQLObject):
     # password = so.StringCol(length=50, varchar=True)
     password = so.BLOBCol()
     # salt = so.StringCol(length=50, varchar=True)
-    salt = so.BLOBCol()
+    #salt = so.BLOBCol()
 
 class Dum(so.SQLObject):
     class sqlmeta:
