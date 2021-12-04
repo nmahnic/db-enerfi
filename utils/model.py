@@ -113,7 +113,7 @@ def validUser(email, passwd):
             return user
         else:
             return None
-        
+
     else:
         return None
 
@@ -125,7 +125,7 @@ def getUser(name,lastname,email):
     )
     if query.count() != 0:
         return query.getOne()
-    else: 
+    else:
         return None
 
 def listAlluser():
@@ -145,7 +145,7 @@ def listAllmeter():
     return d
 
 def listAllmeasure():
-    measures = Measure.select()
+    measures = Measure.select().limit(100)
     d = [to_dict(measure) for measure in measures]
     return d
 
@@ -153,7 +153,7 @@ def listMeterByUser(userValid):
     meters = Meter.selectBy(userID=userValid.id)
     if meters.count() != 0:
         d = [to_dict(meter) for meter in meters]
-        return d  
+        return d
     else:
         return None
 
@@ -161,7 +161,7 @@ def listDumByUser(userValid):
     dums = Dum.selectBy(userID=userValid.id)
     if dums.count() != 0:
         d = [to_dict(dum) for dum in dums]
-        return d 
+        return d
     else:
         return None
 
@@ -170,6 +170,6 @@ def listMeasureByUser(dum):
     measures = Measure.selectBy(dumID=dum.id)
     if measures.count() != 0:
         d = [to_dict(measure) for measure in measures]
-        return d  
+        return d
     else:
         return None
