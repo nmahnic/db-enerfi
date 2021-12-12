@@ -3,7 +3,8 @@ import sqlobject as so
 import os
 import defs
 import functions
-
+from sqlobject.sqlbuilder import FULLJOINConditional,RIGHTJOINOn,LEFTJOINOn,FULLJOINOn,JOIN, Alias,Select
+import json
 # uri = "mysql://{}:{}@{}/{}".format(defs.USER,defs.PASSWORD,defs.HOST,defs.DBASE)
 # print(uri)
 # connection = so.connectionForURI(uri)
@@ -29,6 +30,7 @@ class Dum(so.SQLObject):
     name = so.StringCol(length=50, varchar=True)
     enable = so.BoolCol()
     measures = so.MultipleJoin('Measure')
+
 
 class Meter(so.SQLObject):
     class sqlmeta:
@@ -165,6 +167,13 @@ def listDumByUser(userValid):
     else:
         return None
 
+def listFullDumByUser(userValid):
+    #dums = Dum.select(Dum.userID == 1,join=FULLJOINConditional(None, Meter, None, Dum.q.name))
+    dums=[]
+    for dum in Dum.selectBy(userID=userValid.id):
+        for meter in Meter.selectBy(dum=dum.id):
+            dums.append({"id":dum.id,"name":dum.name,"enable":dum.enable,"mac":meter.macAddress})
+    return dums
 
 def listMeasureByUser(dum):
     measures = Measure.selectBy(dumID=dum.id)

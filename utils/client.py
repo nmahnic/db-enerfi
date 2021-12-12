@@ -2,7 +2,7 @@ import requests
 from pprint import pprint
 import json
 
-class Client: 
+class Client:
 
     def test():
         URL = 'http://localhost:5000/test/'
@@ -14,7 +14,7 @@ class Client:
         return data
         # print(type(r.json()))
 
- #####################    USER    #####################       
+ #####################    USER    #####################
     def listUser():
         URL = 'http://localhost:5000/user/'
         r = requests.get(URL)
@@ -56,7 +56,7 @@ class Client:
         return data
         # print(type(r.json()))
 
- #####################    DUM    ##################### 
+ #####################    DUM    #####################
     def listDum():
         URL = 'http://localhost:5000/dum/'
         r = requests.get(URL)
@@ -66,7 +66,7 @@ class Client:
         data = json.loads(r.text)
         return data
         # print(type(r.json()))
-    
+
     def listDumByUser(email,passwd):
         URL = 'http://localhost:5000/listdumbyuser/'
         payload = {'passwd':passwd, 'email':email}
@@ -77,7 +77,17 @@ class Client:
         data = json.loads(r.text)
         return data
 
- #####################    METER    ##################### 
+    def listFullDumByUser(email,passwd):
+        URL = 'http://localhost:5000/listfulldumbyuser/'
+        payload = {'passwd':passwd, 'email':email}
+        headers = {'content-type': 'application/json'}
+        r = requests.post(URL, data=json.dumps(payload), headers=headers)
+
+        print(r.status_code, r.json())
+        data = json.loads(r.text)
+        return data
+
+ #####################    METER    #####################
     def listmeter():
         URL = 'http://localhost:5000/meter/'
         r = requests.get(URL)
@@ -137,7 +147,7 @@ class Client:
         print(r.status_code, r.json())
         data = json.loads(r.text)
         return data
- #####################    MEASURE    ##################### 
+ #####################    MEASURE    #####################
     def listMeasure():
         URL = 'http://localhost:5000/measure/'
         r = requests.get(URL)
@@ -166,7 +176,7 @@ class Client:
         data = json.loads(r.text)
         return data
         # print(type(r.json()))
-    
+
     def listMeasureByUser(email,passwd,mac):
         URL = 'http://localhost:5000/listmeasurebyuser/'
         payload = {'passwd':passwd, 'email':email, 'mac':mac}

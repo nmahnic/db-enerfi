@@ -3,16 +3,20 @@
 # importing sys
 import sys
 import os
-  
+
 # adding Folder_2 to the system path
 sys.path.insert(0, os.getcwd()+'/utils')
 
 from flask import Flask, jsonify, request
 from flask_restful import Resource, Api
+from flask_cors import CORS, cross_origin
 import model
 import functions
 
 app = Flask(__name__)
+
+cors = CORS(app, resources={r"*": {"origins": "*"}})
+
 api = Api(app)
 
 @api.resource('/test/')
@@ -22,7 +26,7 @@ class getMeasureByDum(Resource):
         # print(a)
         return jsonify(a)
 
- #####################    USER    ##################### 
+ #####################    USER    #####################
 @api.resource('/user/')
 class user(Resource):
     def get(self):
@@ -66,7 +70,7 @@ class userPassword(Resource):
         else:
             return {'message':'User is not valid'}, 203
 
- #####################    METER    ##################### 
+ #####################    METER    #####################
 @api.resource('/meter/')
 class meter(Resource):
     def get(self):
@@ -88,7 +92,7 @@ class listmeterbyuser(Resource):
         else:
             return {'message':'User is not valid'}, 203
 
- #####################    DUM    ##################### 
+ #####################    DUM    #####################
 @api.resource('/dum/')
 class dum(Resource):
     def get(self):
@@ -142,7 +146,7 @@ class changedum(Resource):
                     return {'message':'mac was updated'},200
             else:
                 return {'message':'User is not valid'}, 203
-            
+
 
 
 @api.resource('/disabledum/')
@@ -181,8 +185,21 @@ class listdumbyuser(Resource):
         else:
             return {'message':'User is not valid'}, 203
 
+@api.resource('/listfulldumbyuser/')
+class listfulldumbyuser(Resource):
+    def post(self):
+        args = request.get_json()
+        userValid = model.validUser(
+                passwd = args["passwd"],
+                email=args["email"]
+            )
+        if userValid:
+            dums = model.listFullDumByUser(userValid)
+            return jsonify(dums)
+        else:
+            return {'message':'User is not valid'}, 203
 
-  #####################    MEASURE    ##################### 
+  #####################    MEASURE    #####################
 @api.resource('/measure/')
 class measure(Resource):
     def get(self):
@@ -219,7 +236,7 @@ class listmeasurebyuser(Resource):
         if userValid:
             dum = model.findDumByMac(mac=args["mac"])
             if(dum.enable == False):
-                return {'message':'This DUM was deleted'}, 203 
+                return {'message':'This DUM was deleted'}, 203
             else:
                 measures = model.listMeasureByUser(dum)
                 return jsonify(measures)
@@ -227,4 +244,4 @@ class listmeasurebyuser(Resource):
             return {'message':'User is not valid'}, 203
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', port=5000)
