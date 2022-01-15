@@ -41,7 +41,7 @@ class user(Resource):
                 email=args["email"]
             )
         if userExist:
-            return {'message':'User already exist'}, 405
+            return {'message':'User already exist', 'responseCode': 204}, 204
         else:
             salt = functions.generate_salt()
             password = args["password"].encode('utf-8')
@@ -52,23 +52,37 @@ class user(Resource):
                 email= args["email"]
             )
             print("POST ->", args)
-            return {'message':'User created'}, 201
+            return {'message':'User created', 'responseCode': 201}, 201
 
 @api.resource('/userpasswd/')
 class userPassword(Resource):
     def post(self):
         args = request.get_json()
         user = model.validUser(
-                passwd = args["passwd"],
+                passwd = args["password"],
                 email=args["email"]
             )
         if user:
             salt = functions.generate_salt()
             newpasswd = args["newpasswd"].encode('utf-8')
             user.password  = (functions.get_hashed_password(newpasswd,salt))
-            return {'message':'Password updated'}, 202
+            return {'message':'Password updated', 'responseCode': 200}, 200
         else:
-            return {'message':'User is not valid'}, 203
+            return {'message':'User is not valid', 'responseCode': 204}, 204
+
+@api.resource('/validateuser/')
+class validateuser(Resource):
+    def post(self):
+        args = request.get_json()
+        userValid = model.validUser(
+                passwd = args["password"],
+                email=args["email"]
+            )
+        if userValid:
+            return {'message':'User valid', 'responseCode': 200}, 200
+
+        else:
+            return {'message':'User is not valid', 'responseCode': 204}, 204
 
  #####################    METER    #####################
 @api.resource('/meter/')
