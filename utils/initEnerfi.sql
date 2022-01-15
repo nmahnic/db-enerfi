@@ -89,11 +89,11 @@ ALTER TABLE measure ADD CONSTRAINT FK_measureDUMID
 /*******************************************************************************
    Populate Tables
 ********************************************************************************/
-INSERT INTO user (name,lastname,email,password) VALUES ('Nicolas','Mahnic','nmahnic@gmail.com','1234');
+-- INSERT INTO user (name,lastname,email,password) VALUES ('Nicolas','Mahnic','nmahnic@gmail.com','1234');
 
-INSERT INTO dum (user_id,name) VALUES (1, 'Heladera');
-INSERT INTO dum (user_id,name) VALUES (1, 'Lavarropas');
+-- INSERT INTO dum (user_id,name) VALUES (1, 'Heladera');
+-- INSERT INTO dum (user_id,name) VALUES (1, 'Lavarropas');
 
-INSERT INTO meter (mac_address,user_id,dum_id) VALUES ('84-D8-1B-0C-5B-C1',1,1);
-INSERT INTO meter (mac_address,user_id,dum_id) VALUES ('B0-B2-8F-1D-4D-02',1,2);
-INSERT INTO measure (dum_id,vrms,irms,active_power,pf,thd,cos_phi) VALUES (1,1.1,1.2,1.3,0.9,0.8,0.1);
+-- INSERT INTO meter (mac_address,user_id,dum_id) VALUES ('84-D8-1B-0C-5B-C1',1,1);
+-- INSERT INTO meter (mac_address,user_id,dum_id) VALUES ('B0-B2-8F-1D-4D-02',1,2);
+-- INSERT INTO measure (dum_id,vrms,irms,active_power,pf,thd,cos_phi) VALUES (1,1.1,1.2,1.3,0.9,0.8,0.1);
