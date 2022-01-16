@@ -191,7 +191,7 @@ class listdumbyuser(Resource):
     def post(self):
         args = request.get_json()
         userValid = model.validUser(
-                passwd = args["passwd"],
+                passwd = args["password"],
                 email=args["email"]
             )
         if userValid:
@@ -205,7 +205,7 @@ class listfulldumbyuser(Resource):
     def post(self):
         args = request.get_json()
         userValid = model.validUser(
-                passwd = args["passwd"],
+                passwd = args["password"],
                 email=args["email"]
             )
         if userValid:
