@@ -41,7 +41,7 @@ class user(Resource):
                 email=args["email"]
             )
         if userExist:
-            return {'message':'User already exist', 'responseCode': 204}, 204
+            return {'message':'User already exist', 'responseCode': 203}, 203
         else:
             salt = functions.generate_salt()
             password = args["password"].encode('utf-8')
@@ -68,7 +68,7 @@ class userPassword(Resource):
             user.password  = (functions.get_hashed_password(newpasswd,salt))
             return {'message':'Password updated', 'responseCode': 200}, 200
         else:
-            return {'message':'User is not valid', 'responseCode': 204}, 204
+            return {'message':'User is not valid', 'responseCode': 203}, 203
 
 @api.resource('/validateuser/')
 class validateuser(Resource):
@@ -82,7 +82,7 @@ class validateuser(Resource):
             return {'message':'User valid', 'responseCode': 200}, 200
 
         else:
-            return {'message':'User is not valid', 'responseCode': 204}, 204
+            return {'message':'User is not valid', 'responseCode': 203}, 203
 
  #####################    METER    #####################
 @api.resource('/meter/')
@@ -115,6 +115,7 @@ class dum(Resource):
         return jsonify(a)
     def post(self):
         args = request.get_json()
+        print(args)
         meter = model.findMeterByMac(mac=args["mac"])
         if meter == None:
 
@@ -123,7 +124,7 @@ class dum(Resource):
                     email=args["email"]
                 )
             if userValid == None:
-                return {'message':'User is not valid'}, 203
+                return {'message':'User is not valid', 'responseCode': 203}, 203
             else:
                 model.Dum(
                     name= args["name"],
@@ -136,9 +137,9 @@ class dum(Resource):
                     dumID = dumId,
                     userID = userValid.id
                 )
-                return {'message':'DUM and Meter created'},201
+                return {'message':'DUM and Meter created', 'responseCode': 201},201
         else:
-            return {'message':'DUM already exist'},405
+            return {'message':'DUM already exist', 'responseCode': 202},202
 
 @api.resource('/changedum/')
 class changedum(Resource):
