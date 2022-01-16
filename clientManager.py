@@ -88,7 +88,7 @@ if __name__ == '__main__':
         if sys.argv[2] == '--dum':
             mail = input("Ingrese mail: ")
             passwd = input("Ingrese passwd: ")
-            Client.listDumByUser(mail,passwd)
+            Client.listFullDumByUser(mail,passwd)
 
         elif sys.argv[2] == '--meter':
             mail = input("Ingrese mail: ")
