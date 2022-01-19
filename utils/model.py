@@ -182,3 +182,17 @@ def listMeasureByUser(dum):
         return d
     else:
         return None
+
+def listMeasureByUser2(dum):
+    measures=[]
+    for measure in Measure.selectBy(dumID=dum.id).orderBy('timestamp').limit(100).reversed():
+        measures.insert(0,{
+            "timestamp":measure.timestamp,
+            "vrms":measure.vrms,
+            "irms":measure.irms,
+            "active_power":measure.active_power,
+            "pf":measure.pf,
+            "thd":measure.thd,
+            "cos_phi":measure.cos_phi,
+        })
+    return measures

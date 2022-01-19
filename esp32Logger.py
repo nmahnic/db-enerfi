@@ -18,7 +18,7 @@ def logMeasurese(sc):
     dumID = round(random.random(),2)
     pf = round(random.random(),2)
     thd = round(random.random(),2)
-    vrms = round(random.uniform(180, 240),2)
+    vrms = round(random.uniform(198, 242),2)
     irms = round(random.uniform(1, 10),2)
     Client.addMeasure(sys.argv[1],active_power,cos_phi,dumID,irms,pf,thd,vrms)
     s.enter(2,1, logMeasurese, (sc,))

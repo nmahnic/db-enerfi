@@ -253,7 +253,7 @@ class listmeasurebyuser(Resource):
             if(dum.enable == False):
                 return {'message':'This DUM was deleted'}, 203
             else:
-                measures = model.listMeasureByUser(dum)
+                measures = model.listMeasureByUser2(dum)
                 return jsonify(measures)
         else:
             return {'message':'User is not valid'}, 203
