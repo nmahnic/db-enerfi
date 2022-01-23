@@ -26,7 +26,7 @@ def logMeasurese(sc):
 
 def logMeasurese2(sc):
     print("REQUEST: ",datetime.datetime.now())
-    filename = 'measure.json'
+    filename = 'measurePava.json'
     # Opening JSON file
     f = open(filename)
     jsonData = json.load(f)

@@ -4,9 +4,21 @@ from numpy import pi
 from scipy.fft import fft
 from scipy.fft import rfft, rfftfreq
 from scipy.signal import find_peaks
-
+from scipy.signal import butter, lfilter, freqz
+import matplotlib.pyplot as plt
 
 class Processor:
+
+    def butter_lowpass(self, cutoff, fs, order=5):
+        nyq = 0.5 * fs
+        normal_cutoff = cutoff / nyq
+        b, a = butter(order, normal_cutoff, btype='low', analog=False)
+        return b, a
+
+    def butter_lowpass_filter(self, data, cutoff, fs, order=5):
+        b, a = self.butter_lowpass(cutoff, fs, order=order)
+        y = lfilter(b, a, data)
+        return y
 
     def rmsValue(self, arr, n):
         square = 0
@@ -64,9 +76,22 @@ class Processor:
             yf[x] = 0
 
 
-        # time = np.linspace(0.0, 0.4, int(0.4)/1e-4)
-        # waveofSin = (2**.5)*np.cos(2.0*pi*50*time)    
-        # n = len(waveofSin)
+        order = 11
+        fs = 2500      
+        cutoff = 60
+        y = self.butter_lowpass_filter(sample_balanced, cutoff, fs, order)
+        t = np.linspace(0, 1, len(sample_balanced), endpoint=False)
+
+        # plt.subplot(2, 1, 2)
+        # plt.plot(t, sample_balanced, 'b-', label='data')
+        # plt.plot(t, y, 'g-', linewidth=2, label='filtered data')
+        # plt.xlabel('Time [sec]')
+        # plt.grid()
+        # plt.legend()
+
+        # plt.subplots_adjust(hspace=0.35)
+        # plt.show()
+
         irms = self.rmsValue(sample_balanced, len(sample_balanced))
         vrms = irms
         print ("RMS:")
