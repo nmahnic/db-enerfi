@@ -1,6 +1,7 @@
 # importing sys
 import sys
 import os
+import json
   
 # adding Folder_2 to the system path
 sys.path.insert(0, os.getcwd()+'/utils')
@@ -23,6 +24,17 @@ def logMeasurese(sc):
     Client.addMeasure(sys.argv[1],active_power,cos_phi,dumID,irms,pf,thd,vrms)
     s.enter(2,1, logMeasurese, (sc,))
 
+def logMeasurese2(sc):
+    print("REQUEST: ",datetime.datetime.now())
+    filename = 'measure.json'
+    # Opening JSON file
+    f = open(filename)
+    jsonData = json.load(f)
+    f.close()
+
+    Client.addMeasure2(jsonData)
+    s.enter(2,1, logMeasurese2, (sc,))
+
 
 if __name__ == '__main__':
     # chequeo de los argumentos de la linea de comandos
@@ -32,7 +44,7 @@ if __name__ == '__main__':
         sys.exit()
     else:
         s = sched.scheduler(time.time, time.sleep)  
-        s.enter(1,1, logMeasurese, (s,))
+        s.enter(1,1, logMeasurese2, (s,))
         s.run() 
 
 

@@ -12,6 +12,7 @@ from flask_restful import Resource, Api
 from flask_cors import CORS, cross_origin
 import model
 import functions
+from processor import Processor
 
 app = Flask(__name__)
 
@@ -224,20 +225,23 @@ class measure(Resource):
 
     def post(self):
         args = request.get_json()
-        #print(args)
+        # print(args)
         dum = model.findDumByMac(mac=args["mac"])
         if dum == None:
             return {'message':'DUM does not exist with this MAC'},405
         else:
-            model.Measure(
-                dum = dum,
-                active_power = args["active_power"],
-                cos_phi = args["cos_phi"],
-                irms = args["irms"],
-                pf = args["pf"],
-                thd = args["thd"],
-                vrms = args["vrms"],
-            )
+            c = Processor()
+            b = c.task(args)
+            print(b)
+            # model.Measure(
+            #     dum = dum,
+            #     active_power = args["active_power"],
+            #     cos_phi = args["cos_phi"],
+            #     irms = args["irms"],
+            #     pf = args["pf"],
+            #     thd = args["thd"],
+            #     vrms = args["vrms"],
+            # )
             return {'message':'OK'},201
 
 @api.resource('/listmeasurebyuser/')
