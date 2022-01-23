@@ -1,11 +1,30 @@
 import json
 import numpy as np
+from numpy import pi
 from scipy.fft import fft
 from scipy.fft import rfft, rfftfreq
 from scipy.signal import find_peaks
 
 
 class Processor:
+
+    def rmsValue(self, arr, n):
+        square = 0
+        mean = 0.0
+        root = 0.0
+        
+        #Calculate square
+        for i in range(0,n):
+            square += (arr[i]**2)
+        
+        #Calculate Mean
+        mean = (square / (float)(n)) 
+
+        #Calculate Root
+        root = mean**.5
+        
+        return root
+
     def thd(self, abs_data,xpeak):  
         sq_sum=0.0
         for r in range(len(abs_data)):
@@ -45,6 +64,14 @@ class Processor:
             yf[x] = 0
 
 
+        # time = np.linspace(0.0, 0.4, int(0.4)/1e-4)
+        # waveofSin = (2**.5)*np.cos(2.0*pi*50*time)    
+        # n = len(waveofSin)
+        irms = self.rmsValue(sample_balanced, len(sample_balanced))
+        vrms = irms
+        print ("RMS:")
+        print ("\t{:.4f}".format(irms),"A")
+
         thd_value = self.thd(abs(yf), xpeak)
         print ("Total Harmonic Distortion:")
         print ("\t{:.4f}".format(thd_value*100),"%")
@@ -58,6 +85,17 @@ class Processor:
         print ('\t',cosphi)
 
         print("Power Factor = Displacement Factor x Distortion Factor:")
-        print ("\t{:.4f}".format(df_value+cosphi))
+        pf = df_value+cosphi
+        print ("\t{:.4f}".format(pf))
 
-        return 201
+
+        res = {
+            "active_power" : float(vrms*irms),
+            "cos_phi" : float(cosphi),
+            "irms" : float(irms),
+            "pf" : float(pf),
+            "thd" : float(thd_value),
+            "vrms" : float(vrms),
+        }
+
+        return res

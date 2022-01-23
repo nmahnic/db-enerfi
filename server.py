@@ -231,17 +231,16 @@ class measure(Resource):
             return {'message':'DUM does not exist with this MAC'},405
         else:
             c = Processor()
-            b = c.task(args)
-            print(b)
-            # model.Measure(
-            #     dum = dum,
-            #     active_power = args["active_power"],
-            #     cos_phi = args["cos_phi"],
-            #     irms = args["irms"],
-            #     pf = args["pf"],
-            #     thd = args["thd"],
-            #     vrms = args["vrms"],
-            # )
+            res = c.task(args)
+            model.Measure(
+                dum = dum,
+                active_power = res["active_power"],
+                cos_phi = res["cos_phi"],
+                irms = res["irms"],
+                pf = res["pf"],
+                thd = res["thd"],
+                vrms = res["vrms"],
+            )
             return {'message':'OK'},201
 
 @api.resource('/listmeasurebyuser/')
