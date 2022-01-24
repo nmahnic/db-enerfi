@@ -109,8 +109,8 @@ class Processor:
         # plt.subplots_adjust(hspace=0.35)
         # plt.show()
 
-        irms = self.rmsValue(current_balanced, len(current_balanced))
-        vrms = self.rmsValue(voltage_balanced, len(voltage_balanced))
+        irms = self.rmsValue(current_fundamental, len(current_fundamental))
+        vrms = self.rmsValue(voltage_fundamental, len(voltage_fundamental))
 
         print ("RMS:")
         print ("\t{:.4f}".format(irms),"A")
@@ -128,12 +128,12 @@ class Processor:
         print ('\t',cosphi)
 
         print("Power Factor = Displacement Factor x Distortion Factor:")
-        pf = df_value+cosphi
+        pf = df_value*cosphi
         print ("\t{:.4f}".format(pf))
 
 
         res = {
-            "active_power" : float(vrms*irms),
+            "active_power" : float(vrms*irms*cosphi),
             "cos_phi" : float(cosphi),
             "irms" : float(irms),
             "pf" : float(pf),
