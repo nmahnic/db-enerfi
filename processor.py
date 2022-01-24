@@ -125,7 +125,6 @@ class Processor:
         print ("\t{:.4f}".format(df_value))
 
         print ("Displacement factor 'cos(phi)':")
-        cosphi = 0 
         print ('\t',cosphi)
 
         print("Power Factor = Displacement Factor x Distortion Factor:")
