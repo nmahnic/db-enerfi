@@ -1,13 +1,17 @@
-import json
 import numpy as np
 from numpy import pi
-from scipy.fft import fft
-from scipy.fft import rfft, rfftfreq
+# from scipy.fft import fft, rfftfreq
+from scipy.fft import rfft
 from scipy.signal import find_peaks
-from scipy.signal import butter, lfilter, freqz
-import matplotlib.pyplot as plt
+# from scipy.signal import freqz
+from scipy.signal import butter, lfilter
+# import matplotlib.pyplot as plt
+import math
 
 class Processor:
+
+    def findCrossZero(self, measure):
+        return np.where(np.diff(np.sign(measure)))[0][0]
 
     def butter_lowpass(self, cutoff, fs, order=5):
         nyq = 0.5 * fs
@@ -54,18 +58,18 @@ class Processor:
     
 
     def task(self,data):
-        sample_balanced = data['current'] - np.mean(data['current'])
+        current_balanced = data['current'] - np.mean(data['current'])
+        voltage_balanced = data['voltage'] - np.mean(data['voltage'])
 
-
-        abs_yf = np.abs(fft(sample_balanced))
+        # abs_yf = np.abs(fft(current_balanced))
 
         SAMPLE_RATE = 2500  # Hertz
         DURATION = 1
 
         N = SAMPLE_RATE * DURATION
 
-        f_signal = rfft(sample_balanced)
-        xf = rfftfreq(N, 1 / SAMPLE_RATE)
+        f_signal = rfft(current_balanced)
+        # xf = rfftfreq(N, 1 / SAMPLE_RATE)
 
         yf = f_signal.copy()
         xpeak,ypeak = find_peaks(abs(yf), distance=25)
@@ -79,12 +83,25 @@ class Processor:
         order = 11
         fs = 2500      
         cutoff = 60
-        y = self.butter_lowpass_filter(sample_balanced, cutoff, fs, order)
-        t = np.linspace(0, 1, len(sample_balanced), endpoint=False)
+        fundamentalFrec = 50 
+        current_fundamental = self.butter_lowpass_filter(current_balanced, cutoff, fs, order)
+        voltage_fundamental = self.butter_lowpass_filter(voltage_balanced, cutoff, fs, order)
+
+        t = np.linspace(0, 1, len(current_balanced), endpoint=False)
+
+        zeroCurrent = self.findCrossZero(current_fundamental)
+        zeroVoltage = self.findCrossZero(voltage_fundamental)
+
+        print("zeroCurrent = ",zeroCurrent)
+        print("zeroVoltage = ",zeroVoltage)
+        diffPhase = abs(zeroVoltage - zeroCurrent)*(1/fs)*(2*pi*fundamentalFrec)
+        print("diffPhase = ", diffPhase)
+        cosphi = math.cos(diffPhase)
 
         # plt.subplot(2, 1, 2)
-        # plt.plot(t, sample_balanced, 'b-', label='data')
-        # plt.plot(t, y, 'g-', linewidth=2, label='filtered data')
+        # plt.plot(t, current_balanced, 'b-', label='data')
+        # plt.plot(t, current_fundamental, 'g-', linewidth=2, label='filtered current')
+        # plt.plot(t, voltage_fundamental, 'r-', linewidth=2, label='filtered voltage')
         # plt.xlabel('Time [sec]')
         # plt.grid()
         # plt.legend()
@@ -92,10 +109,12 @@ class Processor:
         # plt.subplots_adjust(hspace=0.35)
         # plt.show()
 
-        irms = self.rmsValue(sample_balanced, len(sample_balanced))
-        vrms = irms
+        irms = self.rmsValue(current_balanced, len(current_balanced))
+        vrms = self.rmsValue(voltage_balanced, len(voltage_balanced))
+
         print ("RMS:")
         print ("\t{:.4f}".format(irms),"A")
+        print ("\t{:.4f}".format(vrms),"V")
 
         thd_value = self.thd(abs(yf), xpeak)
         print ("Total Harmonic Distortion:")
@@ -106,7 +125,7 @@ class Processor:
         print ("\t{:.4f}".format(df_value))
 
         print ("Displacement factor 'cos(phi)':")
-        cosphi = 0
+        cosphi = 0 
         print ('\t',cosphi)
 
         print("Power Factor = Displacement Factor x Distortion Factor:")
