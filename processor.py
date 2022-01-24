@@ -97,6 +97,7 @@ class Processor:
         diffPhase = abs(zeroVoltage - zeroCurrent)*(1/fs)*(2*pi*fundamentalFrec)
         print("diffPhase = ", diffPhase)
         cosphi = math.cos(diffPhase)
+        senphi = math.sin(diffPhase)
 
         # plt.subplot(2, 1, 2)
         # plt.plot(t, current_balanced, 'b-', label='data')
@@ -109,18 +110,32 @@ class Processor:
         # plt.subplots_adjust(hspace=0.35)
         # plt.show()
 
-        irms = self.rmsValue(current_fundamental, len(current_fundamental))
-        vrms = self.rmsValue(voltage_fundamental, len(voltage_fundamental))
+        irms_fundamental = self.rmsValue(current_fundamental, len(current_fundamental))
+        vrms_fundamental = self.rmsValue(voltage_fundamental, len(voltage_fundamental))
+        irms = self.rmsValue(current_balanced, len(current_balanced))
+        vrms = self.rmsValue(voltage_balanced, len(voltage_balanced))
 
-        print ("RMS:")
-        print ("\t{:.4f}".format(irms),"A")
-        print ("\t{:.4f}".format(vrms),"V")
+        active_power = irms_fundamental*vrms_fundamental*cosphi
+        reactive_power = irms_fundamental*vrms_fundamental*senphi
+        apparent_power = irms * vrms
+        distortion_power = ((apparent_power**2)-(active_power**2)+(reactive_power**2))**.5
+        pf_1 = apparent_power/active_power
 
         thd_value = self.thd(abs(yf), xpeak)
+        df_value = self.distortionFactor(thd_value)
+        pf_2 = df_value*cosphi
+        
+        print ("RMS:")
+        print ("\t{:.4f}".format(irms),"A")
+        print ("fo:\t{:.4f}".format(irms_fundamental),"A")
+        print ("\t{:.4f}".format(vrms),"V")
+        print ("fo:\t{:.4f}".format(vrms_fundamental),"V")
+
+        
         print ("Total Harmonic Distortion:")
         print ("\t{:.4f}".format(thd_value*100),"%")
 
-        df_value = self.distortionFactor(thd_value)
+        
         print ("Distorsion factor:")
         print ("\t{:.4f}".format(df_value))
 
@@ -128,15 +143,20 @@ class Processor:
         print ('\t',cosphi)
 
         print("Power Factor = Displacement Factor x Distortion Factor:")
-        pf = df_value*cosphi
-        print ("\t{:.4f}".format(pf))
+        print ("pf_1\t{:.4f}".format(pf_1))
+        print ("pf_2\t{:.4f}".format(pf_2))
 
-
+        print("Power Factor = Displacement Factor x Distortion Factor:")
+        print ("active power\t{:.4f}".format(active_power))
+        print ("reactive power\t{:.4f}".format(reactive_power))
+        print ("apparent power\t{:.4f}".format(apparent_power))
+        print ("distotion power\t{:.4f}".format(distortion_power))
+        
         res = {
-            "active_power" : float(vrms*irms*cosphi),
+            "active_power" : float(active_power),
             "cos_phi" : float(cosphi),
             "irms" : float(irms),
-            "pf" : float(pf),
+            "pf" : float(pf_1),
             "thd" : float(thd_value),
             "vrms" : float(vrms),
         }
