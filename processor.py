@@ -5,7 +5,7 @@ from scipy.fft import rfft
 from scipy.signal import find_peaks
 # from scipy.signal import freqz
 from scipy.signal import butter, lfilter
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import math
 
 class Processor:
@@ -58,8 +58,12 @@ class Processor:
     
 
     def task(self,data):
+        print("Mean Current: ",np.mean(data['current']))
+        print("Mean Voltage: ",np.mean(data['voltage']))
         current_balanced = data['current'] - np.mean(data['current'])
-        voltage_balanced = data['voltage'] - np.mean(data['voltage'])
+        voltage_balanced = -(data['voltage'] - np.mean(data['voltage']))
+    
+
 
         # abs_yf = np.abs(fft(current_balanced))
 
@@ -87,22 +91,40 @@ class Processor:
         current_fundamental = self.butter_lowpass_filter(current_balanced, cutoff, fs, order)
         voltage_fundamental = self.butter_lowpass_filter(voltage_balanced, cutoff, fs, order)
 
-        t = np.linspace(0, 1, len(current_balanced), endpoint=False)
 
-        zeroCurrent = self.findCrossZero(current_fundamental)
-        zeroVoltage = self.findCrossZero(voltage_fundamental)
+        current_max = np.amax(current_fundamental)
+        current_max = 835
+        # current_min = np.amin(current_balanced)
+        voltage_max = np.amax(voltage_fundamental)
+        voltage_max = 1001
+        # voltage_min = np.amin(voltage_balanced)
+
+
+        voltage_fixed = voltage_fundamental*(226.5*(2**0.5))/voltage_max 
+        current_fixed = current_fundamental*(7.1*(2**0.5))/current_max
+
+        print("Max Current:", current_max)
+        # print("Min Current:", current_min)
+        print("Max Voltage:", voltage_max)
+        # print("Min Voltage:", voltage_min)
+
+
+        t = np.linspace(0, 1, len(current_fixed), endpoint=False)
+
+        zeroCurrent = self.findCrossZero(current_fixed)
+        zeroVoltage = self.findCrossZero(voltage_fixed)
 
         print("zeroCurrent = ",zeroCurrent)
         print("zeroVoltage = ",zeroVoltage)
         diffPhase = abs(zeroVoltage - zeroCurrent)*(1/fs)*(2*pi*fundamentalFrec)
         print("diffPhase = ", diffPhase)
-        cosphi = math.cos(diffPhase)
-        senphi = math.sin(diffPhase)
+        cosphi = abs(math.cos(diffPhase))
+        senphi = abs(math.sin(diffPhase))
 
-        # plt.subplot(2, 1, 2)
-        # plt.plot(t, current_balanced, 'b-', label='data')
-        # plt.plot(t, current_fundamental, 'g-', linewidth=2, label='filtered current')
-        # plt.plot(t, voltage_fundamental, 'r-', linewidth=2, label='filtered voltage')
+        # plt.subplot(1, 1, 1)
+        # plt.plot(t, current_balanced, linewidth=2, label='voltage')
+        # plt.plot(t, current_fixed, 'g-', linewidth=2, label='filtered current')
+        # plt.plot(t, voltage_fixed, 'r-', linewidth=2, label='filtered voltage')
         # plt.xlabel('Time [sec]')
         # plt.grid()
         # plt.legend()
@@ -110,10 +132,10 @@ class Processor:
         # plt.subplots_adjust(hspace=0.35)
         # plt.show()
 
-        irms_fundamental = self.rmsValue(current_fundamental, len(current_fundamental))
-        vrms_fundamental = self.rmsValue(voltage_fundamental, len(voltage_fundamental))
-        irms = self.rmsValue(current_balanced, len(current_balanced))
-        vrms = self.rmsValue(voltage_balanced, len(voltage_balanced))
+        irms_fundamental = self.rmsValue(current_fixed, len(current_fixed))
+        vrms_fundamental = self.rmsValue(voltage_fixed, len(voltage_fixed))
+        irms = self.rmsValue(current_fixed, len(current_fixed))
+        vrms = self.rmsValue(voltage_fixed, len(voltage_fixed))
 
         active_power = irms_fundamental*vrms_fundamental*cosphi
         reactive_power = irms_fundamental*vrms_fundamental*senphi
