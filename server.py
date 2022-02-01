@@ -261,5 +261,13 @@ class listmeasurebyuser(Resource):
         else:
             return {'message':'User is not valid'}, 203
 
+  #####################    WHO AM I    #####################
+@api.resource('/whoami/')
+class whoami(Resource):
+    def post(self):
+        args = request.get_json()
+        print(args)
+        return {'message':'OK'},201
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

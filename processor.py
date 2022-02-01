@@ -63,6 +63,8 @@ class Processor:
         current_balanced = data['current'] - np.mean(data['current'])
         voltage_balanced = -(data['voltage'] - np.mean(data['voltage']))
     
+        print("Points Voltage", len(voltage_balanced))
+        print("Points Current", len(current_balanced))
 
 
         # abs_yf = np.abs(fft(current_balanced))
