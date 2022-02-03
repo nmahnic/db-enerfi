@@ -89,7 +89,7 @@ ALTER TABLE measure ADD CONSTRAINT FK_measureDUMID
 /*******************************************************************************
    Populate Tables
 ********************************************************************************/
--- INSERT INTO user (name,lastname,email,password) VALUES ('Nicolas','Mahnic','nmahnic@gmail.com','1234');
+INSERT INTO user (name,lastname,email,password) VALUES ('Nicolas','Mahnic','nmahnic@gmail.com','1234');
 
 -- INSERT INTO dum (user_id,name) VALUES (1, 'Heladera');
 -- INSERT INTO dum (user_id,name) VALUES (1, 'Lavarropas');

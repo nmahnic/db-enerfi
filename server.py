@@ -269,5 +269,22 @@ class whoami(Resource):
         print(args)
         return {'message':'OK'},201
 
+  #####################    DELETE    #####################
+@api.resource('/deleteitem/')
+class deleteItem(Resource):
+    def post(self):
+        args = request.get_json()
+        print(args)
+        meter = model.findMeterByMac(mac=args["mac"])
+        dum = model.findDumByMac(mac=args["mac"])
+        if meter == None:
+            return {'message':'DUM does not exist with this MAC'},405
+        else:
+            dum.enable = False
+            dum.userID = 1
+            meter.macAddress=""
+            dum.userID = 1
+            return {'message':'OK'},201
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
