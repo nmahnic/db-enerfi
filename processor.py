@@ -1,3 +1,4 @@
+from fileinput import filename
 import numpy as np
 from numpy import pi
 # from scipy.fft import fft, rfftfreq
@@ -7,6 +8,8 @@ from scipy.signal import find_peaks
 from scipy.signal import butter, lfilter
 import matplotlib.pyplot as plt
 import math
+from datetime import datetime
+import json
 
 class Processor:
 
@@ -58,6 +61,15 @@ class Processor:
     
 
     def task(self,data):
+
+        # Serializing json 
+        json_object = json.dumps(data, indent = 4)
+        timestr = datetime.now().strftime("%Y_%m_%d-%I_%M_%S_%p")
+        filename = "measuresByDate/sample" + timestr + ".json"
+        # Writing to sample.json
+        with open(filename, "w") as outfile:
+            outfile.write(json_object)
+
         print("Mean Current: ",np.mean(data['current']))
         print("Mean Voltage: ",np.mean(data['voltage']))
         current_balanced = data['current'] - np.mean(data['current'])
@@ -95,10 +107,8 @@ class Processor:
 
         yVoltageMean = np.mean(voltage_fundamental[xVoltage][3:])
         yCurrentMean = np.mean(current_fundamental[xCurrent][3:])
-        print("yVoltage:")
-        print(yVoltageMean)
-        print("yCurrent:")
-        print(yCurrentMean)
+        print("yVoltage:",yVoltageMean)
+        print("yCurrent:",yCurrentMean)
 
         current_max = 1135.8131103378914
         voltage_max = 1147.038207104175
