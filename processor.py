@@ -66,21 +66,15 @@ class Processor:
         print("Points Voltage", len(voltage_balanced))
         print("Points Current", len(current_balanced))
 
-
-        # abs_yf = np.abs(fft(current_balanced))
-
         SAMPLE_RATE = 2500  # Hertz
         DURATION = 1
 
         N = SAMPLE_RATE * DURATION
 
         f_signal = rfft(current_balanced)
-        # xf = rfftfreq(N, 1 / SAMPLE_RATE)
 
         yf = f_signal.copy()
         xpeak,ypeak = find_peaks(abs(yf), distance=25)
-        # yf[(np.abs(xf)>3)] = 0 # cut signal above 3Hz
-
 
         for x in range(5):
             yf[x] = 0
@@ -93,28 +87,27 @@ class Processor:
         current_fundamental = self.butter_lowpass_filter(current_balanced, cutoff, fs, order)
         voltage_fundamental = self.butter_lowpass_filter(voltage_balanced, cutoff, fs, order)
 
+        xVoltage,yVoltage = find_peaks(voltage_fundamental, distance=50)
+        xCurrent,yCurrent = find_peaks(current_fundamental, distance=50)
 
-        current_max = np.amax(current_fundamental)
-        current_max = 835
-        # current_min = np.amin(current_balanced)
-        voltage_max = np.amax(voltage_fundamental)
-        voltage_max = 1001
-        # voltage_min = np.amin(voltage_balanced)
+        # print(voltage_fundamental[xVoltage])
+        # print(current_fundamental[xCurrent])
 
+        yVoltageMean = np.mean(voltage_fundamental[xVoltage][3:])
+        yCurrentMean = np.mean(current_fundamental[xCurrent][3:])
+        print("yVoltage:")
+        print(yVoltageMean)
+        print("yCurrent:")
+        print(yCurrentMean)
 
-        voltage_fixed = voltage_fundamental*(226.5*(2**0.5))/voltage_max 
-        current_fixed = current_fundamental*(7.1*(2**0.5))/current_max
+        current_max = 1135.8131103378914
+        voltage_max = 1147.038207104175
 
-        print("Max Current:", current_max)
-        # print("Min Current:", current_min)
-        print("Max Voltage:", voltage_max)
-        # print("Min Voltage:", voltage_min)
+        voltage_fixed = (voltage_fundamental*(214.5*(2**0.5))/voltage_max)*1.0
+        current_fixed = (current_fundamental*(7.1*(2**0.5))/current_max)*1.0
 
-
-        t = np.linspace(0, 1, len(current_fixed), endpoint=False)
-
-        zeroCurrent = self.findCrossZero(current_fixed)
-        zeroVoltage = self.findCrossZero(voltage_fixed)
+        zeroCurrent = self.findCrossZero(current_fixed[200:])
+        zeroVoltage = self.findCrossZero(voltage_fixed[200:])
 
         print("zeroCurrent = ",zeroCurrent)
         print("zeroVoltage = ",zeroVoltage)
@@ -123,21 +116,25 @@ class Processor:
         cosphi = abs(math.cos(diffPhase))
         senphi = abs(math.sin(diffPhase))
 
+        # t = np.linspace(0, 1, len(current_fixed), endpoint=False)
         # plt.subplot(1, 1, 1)
-        # plt.plot(t, current_balanced, linewidth=2, label='voltage')
+        # plt.plot(t, current_balanced, linewidth=2, label='current_balanced')
         # plt.plot(t, current_fixed, 'g-', linewidth=2, label='filtered current')
         # plt.plot(t, voltage_fixed, 'r-', linewidth=2, label='filtered voltage')
+        # plt.plot(voltage_fundamental, 'g-', linewidth=2, label='voltage_fundamental')
+        # plt.plot(current_fundamental, 'r-', linewidth=2, label='current_fundamental')
+        # plt.plot(xVoltage, voltage_fundamental[xVoltage], 'o')
+        # plt.plot(xCurrent, current_fundamental[xCurrent], 'g^')
         # plt.xlabel('Time [sec]')
+        # plt.xlabel('samples')
         # plt.grid()
         # plt.legend()
-
-        # plt.subplots_adjust(hspace=0.35)
         # plt.show()
 
-        irms_fundamental = self.rmsValue(current_fixed, len(current_fixed))
-        vrms_fundamental = self.rmsValue(voltage_fixed, len(voltage_fixed))
-        irms = self.rmsValue(current_fixed, len(current_fixed))
-        vrms = self.rmsValue(voltage_fixed, len(voltage_fixed))
+        irms_fundamental = self.rmsValue(current_fixed[200:], len(current_fixed[200:]))
+        vrms_fundamental = self.rmsValue(voltage_fixed[200:], len(voltage_fixed[200:]))
+        irms = self.rmsValue(current_fixed[200:], len(current_fixed[200:]))
+        vrms = self.rmsValue(voltage_fixed[200:], len(voltage_fixed[200:]))
 
         active_power = irms_fundamental*vrms_fundamental*cosphi
         reactive_power = irms_fundamental*vrms_fundamental*senphi
