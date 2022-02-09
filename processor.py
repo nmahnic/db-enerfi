@@ -31,20 +31,20 @@ class Processor:
         square = 0
         mean = 0.0
         root = 0.0
-        
+
         #Calculate square
         for i in range(0,n):
             square += (arr[i]**2)
-        
+
         #Calculate Mean
-        mean = (square / (float)(n)) 
+        mean = (square / (float)(n))
 
         #Calculate Root
         root = mean**.5
-        
+
         return root
 
-    def thd(self, abs_data,xpeak):  
+    def thd(self, abs_data,xpeak):
         sq_sum=0.0
         for r in range(len(abs_data)):
             if(r in xpeak):
@@ -58,11 +58,11 @@ class Processor:
     def distortionFactor(self, thd):
         den = 1+(thd**2)
         return (1/den)**.5
-    
+
 
     def task(self,data):
 
-        # Serializing json 
+        # Serializing json
         json_object = json.dumps(data, indent = 4)
         timestr = datetime.now().strftime("%Y_%m_%d-%I_%M_%S_%p")
         filename = "measuresByDate/sample" + timestr + ".json"
@@ -74,7 +74,7 @@ class Processor:
         print("Mean Voltage: ",np.mean(data['voltage']))
         current_balanced = data['current'] - np.mean(data['current'])
         voltage_balanced = -(data['voltage'] - np.mean(data['voltage']))
-    
+
         print("Points Voltage", len(voltage_balanced))
         print("Points Current", len(current_balanced))
 
@@ -86,16 +86,16 @@ class Processor:
         f_signal = rfft(current_balanced)
 
         yf = f_signal.copy()
-        xpeak,ypeak = find_peaks(abs(yf), distance=25)
+        xpeak,ypeak = find_peaks(abs(yf), distance=90)
 
         for x in range(5):
             yf[x] = 0
 
 
         order = 11
-        fs = 2500      
+        fs = 2500
         cutoff = 60
-        fundamentalFrec = 50 
+        fundamentalFrec = 50
         current_fundamental = self.butter_lowpass_filter(current_balanced, cutoff, fs, order)
         voltage_fundamental = self.butter_lowpass_filter(voltage_balanced, cutoff, fs, order)
 
@@ -155,18 +155,18 @@ class Processor:
         thd_value = self.thd(abs(yf), xpeak)
         df_value = self.distortionFactor(thd_value)
         pf_2 = df_value*cosphi
-        
+
         print ("RMS:")
         print ("\t{:.4f}".format(irms),"A")
         print ("fo:\t{:.4f}".format(irms_fundamental),"A")
         print ("\t{:.4f}".format(vrms),"V")
         print ("fo:\t{:.4f}".format(vrms_fundamental),"V")
 
-        
+
         print ("Total Harmonic Distortion:")
         print ("\t{:.4f}".format(thd_value*100),"%")
 
-        
+
         print ("Distorsion factor:")
         print ("\t{:.4f}".format(df_value))
 
@@ -182,7 +182,7 @@ class Processor:
         print ("reactive power\t{:.4f}".format(reactive_power))
         print ("apparent power\t{:.4f}".format(apparent_power))
         print ("distotion power\t{:.4f}".format(distortion_power))
-        
+
         res = {
             "active_power" : float(active_power),
             "cos_phi" : float(cosphi),
