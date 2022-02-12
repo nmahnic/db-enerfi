@@ -238,7 +238,8 @@ class measure(Resource):
                 cos_phi = res["cos_phi"],
                 irms = res["irms"],
                 pf = res["pf"],
-                thd = res["thd"],
+                thd_i = res["thd_i"],
+                thd_v = res["thd_v"],
                 vrms = res["vrms"],
             )
             return {'message':'OK'},201

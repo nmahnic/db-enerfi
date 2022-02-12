@@ -49,7 +49,8 @@ class Measure(so.SQLObject):
     irms = so.FloatCol()
     active_power = so.FloatCol()
     pf = so.FloatCol()
-    thd = so.FloatCol()
+    thd_i = so.FloatCol()
+    thd_v = so.FloatCol()
     cos_phi = so.FloatCol()
     dum = so.ForeignKey('Dum')
 
@@ -193,7 +194,8 @@ def listMeasureByUser2(dum):
             "irms":measure.irms,
             "active_power":measure.active_power,
             "pf":measure.pf,
-            "thd":measure.thd,
+            "thd_i":measure.thd_i,
+            "thd_v":measure.thd_v,
             "cos_phi":measure.cos_phi,
         })
     return measures

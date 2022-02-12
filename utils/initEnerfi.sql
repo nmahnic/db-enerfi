@@ -62,7 +62,8 @@ CREATE TABLE measure
     irms FLOAT,
     active_power FLOAT,
     pf FLOAT,
-    thd FLOAT,
+    thd_i FLOAT,
+    thd_v FLOAT,
     cos_phi FLOAT,
     CONSTRAINT PK_measureID PRIMARY KEY  (id)
 );

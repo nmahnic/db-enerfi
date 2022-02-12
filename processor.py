@@ -155,7 +155,7 @@ class Processor:
         print ("\t{:.4f}".format(vrms),"V")
         print ("fo:\t{:.4f}".format(vrms_fundamental),"V")
 
-        if (irms > 1):
+        if (irms > 0.8):
             cosphi = abs(math.cos(diffPhase))
             senphi = abs(math.sin(diffPhase))
 
@@ -217,7 +217,8 @@ class Processor:
             "cos_phi" : float(cosphi),
             "irms" : float(irms),
             "pf" : float(pf_1),
-            "thd" : float(thd_i),
+            "thd_i" : float(thd_i),
+            "thd_v" : float(thd_v),
             "vrms" : float(vrms),
         }
 
