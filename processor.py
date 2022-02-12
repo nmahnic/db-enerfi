@@ -62,13 +62,13 @@ class Processor:
 
     def task(self,data):
 
-        # # Serializing json
-        # json_object = json.dumps(data, indent = 4)
-        # timestr = datetime.now().strftime("%Y_%m_%d-%I_%M_%S_%p")
-        # filename = "measuresByDate/sample" + timestr + ".json"
-        # # Writing to sample.json
-        # with open(filename, "w") as outfile:
-        #     outfile.write(json_object)
+        # Serializing json
+        json_object = json.dumps(data, indent = 4)
+        timestr = datetime.now().strftime("%Y_%m_%d-%I_%M_%S_%p")
+        filename = "measuresByDate/sample" + timestr + ".json"
+        # Writing to sample.json
+        with open(filename, "w") as outfile:
+            outfile.write(json_object)
 
         print("Mean Current: ",np.mean(data['current']))
         print("Mean Voltage: ",np.mean(data['voltage']))
@@ -131,14 +131,14 @@ class Processor:
 
         # t = np.linspace(0, 1, len(current_fixed), endpoint=False)
         # plt.subplot(1, 1, 1)
-        # plt.plot(t, current_balanced, linewidth=2, label='current_balanced')
-        # plt.plot(t, current_fixed, 'g-', linewidth=2, label='filtered current')
-        # plt.plot(t, voltage_fixed, 'r-', linewidth=2, label='filtered voltage')
+        # # plt.plot(t, current_balanced, linewidth=2, label='current_balanced')
+        # # plt.plot(t, current_fixed, 'g-', linewidth=2, label='filtered current')
+        # # plt.plot(t, voltage_fixed, 'r-', linewidth=2, label='filtered voltage')
         # plt.plot(voltage_fundamental, 'g-', linewidth=2, label='voltage_fundamental')
         # plt.plot(current_fundamental, 'r-', linewidth=2, label='current_fundamental')
         # plt.plot(xVoltage, voltage_fundamental[xVoltage], 'o')
         # plt.plot(xCurrent, current_fundamental[xCurrent], 'g^')
-        # plt.xlabel('Time [sec]')
+        # # plt.xlabel('Time [sec]')
         # plt.xlabel('samples')
         # plt.grid()
         # plt.legend()
@@ -151,9 +151,9 @@ class Processor:
 
         print ("RMS:")
         print ("\t{:.4f}".format(irms),"A")
-        print ("fo:\t{:.4f}".format(irms_fundamental),"A")
+        # print ("fo:\t{:.4f}".format(irms_fundamental),"A")
         print ("\t{:.4f}".format(vrms),"V")
-        print ("fo:\t{:.4f}".format(vrms_fundamental),"V")
+        # print ("fo:\t{:.4f}".format(vrms_fundamental),"V")
 
         if (irms > 0.8):
             cosphi = abs(math.cos(diffPhase))
@@ -203,20 +203,21 @@ class Processor:
         print ('\t',cosphi)
 
         print("Power Factor = Displacement Factor x Distortion Factor:")
-        print ("pf_1\t{:.4f}".format(pf_1))
-        print ("pf_2\t{:.4f}".format(pf_2))
+        # print ("pf_1\t{:.4f}".format(pf_1))
+        # print ("pf_2\t{:.4f}".format(pf_2))
+        print ("\t{:.4f}".format(pf_2))
 
         print("Power Factor = Displacement Factor x Distortion Factor:")
         print ("active power\t{:.4f}".format(active_power))
         print ("reactive power\t{:.4f}".format(reactive_power))
         print ("apparent power\t{:.4f}".format(apparent_power))
-        print ("distotion power\t{:.4f}".format(distortion_power))
+        print ("distotion power\t{:.4f}\n".format(distortion_power))
 
         res = {
             "active_power" : float(active_power),
             "cos_phi" : float(cosphi),
             "irms" : float(irms),
-            "pf" : float(pf_1),
+            "pf" : float(pf_2),
             "thd_i" : float(thd_i),
             "thd_v" : float(thd_v),
             "vrms" : float(vrms),
