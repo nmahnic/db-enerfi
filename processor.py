@@ -62,13 +62,13 @@ class Processor:
 
     def task(self,data):
 
-        # Serializing json
-        json_object = json.dumps(data, indent = 4)
-        timestr = datetime.now().strftime("%Y_%m_%d-%I_%M_%S_%p")
-        filename = "measuresByDate/sample" + timestr + ".json"
-        # Writing to sample.json
-        with open(filename, "w") as outfile:
-            outfile.write(json_object)
+        # # Serializing json
+        # json_object = json.dumps(data, indent = 4)
+        # timestr = datetime.now().strftime("%Y_%m_%d-%I_%M_%S_%p")
+        # filename = "measuresByDate/sample" + timestr + ".json"
+        # # Writing to sample.json
+        # with open(filename, "w") as outfile:
+        #     outfile.write(json_object)
 
         print("Mean Current: ",np.mean(data['current']))
         print("Mean Voltage: ",np.mean(data['voltage']))
@@ -83,13 +83,17 @@ class Processor:
 
         N = SAMPLE_RATE * DURATION
 
-        f_signal = rfft(current_balanced)
+        f_signal_i = rfft(current_balanced)
+        f_signal_v = rfft(voltage_balanced)
 
-        yf = f_signal.copy()
-        xpeak,ypeak = find_peaks(abs(yf), distance=90)
+        yf_i = f_signal_i.copy()
+        yf_v = f_signal_v.copy()
+        xpeak_i,ypeak_i = find_peaks(abs(yf_i), distance=90)
+        xpeak_v,ypeak_v = find_peaks(abs(yf_v), distance=90)
 
         for x in range(5):
-            yf[x] = 0
+            yf_i[x] = 0
+            yf_v[x] = 0
 
 
         order = 11
@@ -110,11 +114,12 @@ class Processor:
         print("yVoltage:",yVoltageMean)
         print("yCurrent:",yCurrentMean)
 
-        current_max = 1135.8131103378914
-        voltage_max = 1147.038207104175
+        current_max = 1114.4561810267433
+        voltage_max = 1128.8671478280664
 
-        voltage_fixed = (voltage_fundamental*(214.5*(2**0.5))/voltage_max)*1.0
-        current_fixed = (current_fundamental*(7.1*(2**0.5))/current_max)*1.0
+        voltage_fixed = (voltage_fundamental*(211.2*(2**0.5))/voltage_max)*1.0
+        current_fixed = (current_fundamental*(7.8*(2**0.5))/current_max)*1.0
+        # current_fixed = (current_fundamental*(7.1*(2**0.5))/current_max)*1.0
 
         zeroCurrent = self.findCrossZero(current_fixed[200:])
         zeroVoltage = self.findCrossZero(voltage_fixed[200:])
@@ -123,8 +128,6 @@ class Processor:
         print("zeroVoltage = ",zeroVoltage)
         diffPhase = abs(zeroVoltage - zeroCurrent)*(1/fs)*(2*pi*fundamentalFrec)
         print("diffPhase = ", diffPhase)
-        cosphi = abs(math.cos(diffPhase))
-        senphi = abs(math.sin(diffPhase))
 
         # t = np.linspace(0, 1, len(current_fixed), endpoint=False)
         # plt.subplot(1, 1, 1)
@@ -146,25 +149,51 @@ class Processor:
         irms = self.rmsValue(current_fixed[200:], len(current_fixed[200:]))
         vrms = self.rmsValue(voltage_fixed[200:], len(voltage_fixed[200:]))
 
-        active_power = irms_fundamental*vrms_fundamental*cosphi
-        reactive_power = irms_fundamental*vrms_fundamental*senphi
-        apparent_power = irms * vrms
-        distortion_power = ((apparent_power**2)-(active_power**2)+(reactive_power**2))**.5
-        pf_1 = apparent_power/active_power
-
-        thd_value = self.thd(abs(yf), xpeak)
-        df_value = self.distortionFactor(thd_value)
-        pf_2 = df_value*cosphi
-
         print ("RMS:")
         print ("\t{:.4f}".format(irms),"A")
         print ("fo:\t{:.4f}".format(irms_fundamental),"A")
         print ("\t{:.4f}".format(vrms),"V")
         print ("fo:\t{:.4f}".format(vrms_fundamental),"V")
 
+        if (irms > 1):
+            cosphi = abs(math.cos(diffPhase))
+            senphi = abs(math.sin(diffPhase))
 
-        print ("Total Harmonic Distortion:")
-        print ("\t{:.4f}".format(thd_value*100),"%")
+            active_power = irms_fundamental*vrms_fundamental*cosphi
+            reactive_power = irms_fundamental*vrms_fundamental*senphi
+            apparent_power = irms * vrms
+            distortion_power = ((apparent_power**2)-(active_power**2)+(reactive_power**2))**.5
+            pf_1 = apparent_power/active_power
+
+            thd_i = self.thd(abs(yf_i), xpeak_i)
+            thd_v = self.thd(abs(yf_v), xpeak_v)
+            df_value = self.distortionFactor(thd_i)
+            pf_2 = df_value*cosphi
+
+        else:
+            irms = 0
+            irms_fundamental = 0
+            cosphi = 1
+            senphi = 1
+
+            active_power = 0
+            reactive_power = 0
+            apparent_power = 0
+            distortion_power = ((apparent_power**2)-(active_power**2)+(reactive_power**2))**.5
+            pf_1 = 1
+
+            thd_i = 0
+            thd_v = self.thd(abs(yf_v), xpeak_v)
+            df_value = 1
+            pf_2 = df_value*cosphi
+
+
+
+
+        print ("Total Harmonic Distorsion 'THD I':")
+        print ("\t{:.4f}".format(thd_i*100),"%")
+        print ("Total Harmonic Distorsion 'THD V':")
+        print ("\t{:.4f}".format(thd_v*100),"%")
 
 
         print ("Distorsion factor:")
@@ -188,7 +217,7 @@ class Processor:
             "cos_phi" : float(cosphi),
             "irms" : float(irms),
             "pf" : float(pf_1),
-            "thd" : float(thd_value),
+            "thd" : float(thd_i),
             "vrms" : float(vrms),
         }
 
