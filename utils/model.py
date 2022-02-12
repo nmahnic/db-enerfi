@@ -185,8 +185,9 @@ def listMeasureByUser(dum):
 
 def listMeasureByUser2(dum):
     measures=[]
-    for measure in Measure.selectBy(dumID=dum.id).orderBy('timestamp').limit(100).reversed():
-        measures.insert(0,{
+    allMeasures = Measure.selectBy(dumID=dum.id)
+    for measure in allMeasures[-100:-1]:
+        measures.append({
             "timestamp":measure.timestamp,
             "vrms":measure.vrms,
             "irms":measure.irms,

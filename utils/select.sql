@@ -1,3 +1,5 @@
 USE Enerfi;
 
-SELECT * FROM measure
+-- SELECT * FROM measure;
+
+SELECT * FROM ( SELECT * FROM measure ORDER BY id DESC LIMIT 10) s ORDER BY id ASC;
