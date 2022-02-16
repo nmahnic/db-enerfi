@@ -114,12 +114,11 @@ class Processor:
         print("yVoltage:",yVoltageMean)
         print("yCurrent:",yCurrentMean)
 
-        current_max = 1114.4561810267433
-        voltage_max = 1128.8671478280664
-
-        voltage_fixed = (voltage_fundamental*(211.2*(2**0.5))/voltage_max)*1.0
-        current_fixed = (current_fundamental*(7.8*(2**0.5))/current_max)*1.0
-        # current_fixed = (current_fundamental*(7.1*(2**0.5))/current_max)*1.0
+        voltage_max = 1138.4931561766791
+        current_max = 1108.4474316028134
+        
+        voltage_fixed = (voltage_fundamental*(215.2*(2**0.5))/voltage_max)*1.0
+        current_fixed = (current_fundamental*(8*(2**0.5))/current_max)*1.0
 
         zeroCurrent = self.findCrossZero(current_fixed[200:])
         zeroVoltage = self.findCrossZero(voltage_fixed[200:])
@@ -148,6 +147,11 @@ class Processor:
         vrms_fundamental = self.rmsValue(voltage_fixed[200:], len(voltage_fixed[200:]))
         irms = self.rmsValue(current_fixed[200:], len(current_fixed[200:]))
         vrms = self.rmsValue(voltage_fixed[200:], len(voltage_fixed[200:]))
+
+        # irms_fundamental = irms_fundamental + 0.1
+        # vrms_fundamental = vrms_fundamental + 1.0
+        # irms = irms + 0.1
+        # vrms = vrms + 1.0
 
         print ("RMS:")
         print ("\t{:.4f}".format(irms),"A")
