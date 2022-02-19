@@ -30,7 +30,8 @@ tension = []
 corriente = []
 
 
-filename = "measuresByDate/sample2022_02_19-03_20_37_PM.json"
+# filename = "rectifcadorDiodo/sample2022_02_19-03_41_17_PM.json"
+filename = "sinRectificar/sample2022_02_19-03_57_56_PM.json"
 f = open(filename)
 jsonData = json.load(f)
 f.close()

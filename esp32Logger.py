@@ -10,7 +10,7 @@ from client import Client
 import datetime 
 
 print("REQUEST: ",datetime.datetime.now())
-filename = 'measuresByDate2/sample20220206-131832.json'
+filename = 'sinRectificar/sample2022_02_19-03_57_56_PM.json'
 # filename = 'measurePava.json'
 # Opening JSON file
 f = open(filename)
