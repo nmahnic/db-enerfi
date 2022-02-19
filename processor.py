@@ -88,8 +88,8 @@ class Processor:
 
         yf_i = f_signal_i.copy()
         yf_v = f_signal_v.copy()
-        xpeak_i,ypeak_i = find_peaks(abs(yf_i), distance=90)
-        xpeak_v,ypeak_v = find_peaks(abs(yf_v), distance=90)
+        xpeak_i,ypeak_i = find_peaks(abs(yf_i), distance=40)
+        xpeak_v,ypeak_v = find_peaks(abs(yf_v), distance=40)
 
         for x in range(5):
             yf_i[x] = 0
@@ -114,11 +114,11 @@ class Processor:
         print("yVoltage:",yVoltageMean)
         print("yCurrent:",yCurrentMean)
 
-        voltage_max = 1138.4931561766791
-        current_max = 1108.4474316028134
+        voltage_max = 1139.488075375003
+        current_max = 1113.97432640357
         
-        voltage_fixed = (voltage_fundamental*(215.2*(2**0.5))/voltage_max)*1.0
-        current_fixed = (current_fundamental*(8*(2**0.5))/current_max)*1.0
+        voltage_fixed = (voltage_fundamental*(216.2*(2**0.5))/voltage_max)*1.0
+        current_fixed = (current_fundamental*(7.66*(2**0.5))/current_max)*1.0
 
         zeroCurrent = self.findCrossZero(current_fixed[200:])
         zeroVoltage = self.findCrossZero(voltage_fixed[200:])
@@ -133,8 +133,10 @@ class Processor:
         # # plt.plot(t, current_balanced, linewidth=2, label='current_balanced')
         # # plt.plot(t, current_fixed, 'g-', linewidth=2, label='filtered current')
         # # plt.plot(t, voltage_fixed, 'r-', linewidth=2, label='filtered voltage')
-        # plt.plot(voltage_fundamental, 'g-', linewidth=2, label='voltage_fundamental')
-        # plt.plot(current_fundamental, 'r-', linewidth=2, label='current_fundamental')
+        # # plt.plot(voltage_fundamental, 'g-', linewidth=2, label='voltage_fundamental')
+        # # plt.plot(current_fundamental, 'r-', linewidth=2, label='current_fundamental')
+        # plt.plot(voltage_fixed, 'g-', linewidth=2, label='voltage_fixed')
+        # plt.plot(current_fixed, 'r-', linewidth=2, label='current_fixed')
         # plt.plot(xVoltage, voltage_fundamental[xVoltage], 'o')
         # plt.plot(xCurrent, current_fundamental[xCurrent], 'g^')
         # # plt.xlabel('Time [sec]')
@@ -169,8 +171,27 @@ class Processor:
             distortion_power = ((apparent_power**2)-(active_power**2)+(reactive_power**2))**.5
             pf_1 = apparent_power/active_power
 
+            v_harmonics=[]
+            i_harmonics=[]
+
+            harmonic1_v = abs(yf_v[xpeak_v[0]])
+            harmonic1_i = abs(yf_i[xpeak_i[0]])
+            for i in range(len(xpeak_v)):
+                v_harmonics.append(abs(yf_v[xpeak_v[i]])/harmonic1_v)
+
+            for i in range(len(xpeak_i)):
+                i_harmonics.append(abs(yf_i[xpeak_i[i]])/harmonic1_i)
+
+            print ("V Harmonics':")
+            print (v_harmonics)
+
+            print ("I Harmonics':")
+            print (i_harmonics)
+
             thd_i = self.thd(abs(yf_i), xpeak_i)
             thd_v = self.thd(abs(yf_v), xpeak_v)
+
+
             df_value = self.distortionFactor(thd_i)
             pf_2 = df_value*cosphi
 
