@@ -2,7 +2,9 @@
 import sqlobject as so
 import os
 import defs
-
+import functions
+from sqlobject.sqlbuilder import FULLJOINConditional,RIGHTJOINOn,LEFTJOINOn,FULLJOINOn,JOIN, Alias,Select
+import json
 # uri = "mysql://{}:{}@{}/{}".format(defs.USER,defs.PASSWORD,defs.HOST,defs.DBASE)
 # print(uri)
 # connection = so.connectionForURI(uri)
@@ -14,18 +16,21 @@ class User(so.SQLObject):
     class sqlmeta:
         table = "user"
     name = so.StringCol(length=50, varchar=True)
-    surname = so.StringCol(length=50, varchar=True)
-    surname = so.StringCol(length=50, varchar=True)
-    usernick = so.StringCol(length=50, varchar=True)
-    password = so.StringCol(length=50, varchar=True)
-    mail = so.StringCol(length=50, varchar=True)
+    lastname = so.StringCol(length=50, varchar=True)
+    email = so.StringCol(length=50, varchar=True)
+    # password = so.StringCol(length=50, varchar=True)
+    password = so.BLOBCol()
+    # salt = so.StringCol(length=50, varchar=True)
+    #salt = so.BLOBCol()
 
 class Dum(so.SQLObject):
     class sqlmeta:
         table = "dum"
     user = so.ForeignKey('User')
     name = so.StringCol(length=50, varchar=True)
+    enable = so.BoolCol()
     measures = so.MultipleJoin('Measure')
+
 
 class Meter(so.SQLObject):
     class sqlmeta:
@@ -44,19 +49,9 @@ class Measure(so.SQLObject):
     irms = so.FloatCol()
     active_power = so.FloatCol()
     pf = so.FloatCol()
-    thd = so.FloatCol()
+    thd_i = so.FloatCol()
+    thd_v = so.FloatCol()
     cos_phi = so.FloatCol()
-    freq_1st = so.FloatCol()
-    freq_2nd = so.FloatCol()
-    freq_1st = so.FloatCol()
-    freq_3rd = so.FloatCol()
-    freq_4th = so.FloatCol()
-    freq_5th = so.FloatCol()
-    freq_6th = so.FloatCol()
-    freq_7th = so.FloatCol()
-    freq_8th = so.FloatCol()
-    freq_9th = so.FloatCol()
-    freq_10th = so.FloatCol()
     dum = so.ForeignKey('Dum')
 
 
@@ -74,30 +69,37 @@ def to_dict(obj):
 def findLastDumIdGenerated():
     return Dum.select().count()
 
-def finder(name):
-    query = User.selectBy(name=name).getOne()
-    d = to_dict(query)
-    return d
 
 def finderUserByID(id):
-    query = User.selectBy(id=id).getOne()
-    d = to_dict(query)
-    return d
+    query = User.selectBy(id=id)
+    if query.count() != 0:
+        return query[0]
+    else:
+        return None
 
 def findDumByMac(mac):
+    queryMeter = Meter.selectBy(macAddress=mac)
+    if queryMeter.count() != 0:
+        queryDum = Dum.selectBy(id=queryMeter[0].dumID)
+        if queryDum.count() != 0:
+            return queryDum[0]
+        else:
+            return None
+    else:
+        return None
+
+def findMeterByMac(mac):
     queryMeter = Meter.selectBy(macAddress=mac)
     if queryMeter.count() != 0:
         return queryMeter[0]
     else:
         return None
 
-def findUser(name,surname,usernick,password,mail):
+def findUser(name,lastname,email):
     query = User.selectBy(
         name=name,
-        surname=surname,
-        usernick=usernick,
-        password=password,
-        mail=mail
+        lastname=lastname,
+        email=email
     )
     if query.count() != 0:
         print(query.getOne())
@@ -105,6 +107,29 @@ def findUser(name,surname,usernick,password,mail):
     else:
         return False
 
+def validUser(email, passwd):
+    query = User.selectBy(email=email)
+    passwd = passwd.encode('utf-8')
+    if query.count() != 0:
+        user = query.getOne()
+        if functions.check_password(passwd, user.password):
+            return user
+        else:
+            return None
+
+    else:
+        return None
+
+def getUser(name,lastname,email):
+    query = User.selectBy(
+        name=name,
+        lastname=lastname,
+        email=email
+    )
+    if query.count() != 0:
+        return query.getOne()
+    else:
+        return None
 
 def listAlluser():
     users = User.select()
@@ -123,6 +148,54 @@ def listAllmeter():
     return d
 
 def listAllmeasure():
-    measures = Measure.select()
+    measures = Measure.select().limit(100)
     d = [to_dict(measure) for measure in measures]
     return d
+
+def listMeterByUser(userValid):
+    meters = Meter.selectBy(userID=userValid.id)
+    if meters.count() != 0:
+        d = [to_dict(meter) for meter in meters]
+        return d
+    else:
+        return None
+
+def listDumByUser(userValid):
+    dums = Dum.selectBy(userID=userValid.id)
+    if dums.count() != 0:
+        d = [to_dict(dum) for dum in dums]
+        return d
+    else:
+        return None
+
+def listFullDumByUser(userValid):
+    #dums = Dum.select(Dum.userID == 1,join=FULLJOINConditional(None, Meter, None, Dum.q.name))
+    dums=[]
+    for dum in Dum.selectBy(userID=userValid.id):
+        for meter in Meter.selectBy(dum=dum.id):
+            dums.append({"id":dum.id,"name":dum.name,"enable":dum.enable,"mac":meter.macAddress})
+    return dums
+
+def listMeasureByUser(dum):
+    measures = Measure.selectBy(dumID=dum.id)
+    if measures.count() != 0:
+        d = [to_dict(measure) for measure in measures]
+        return d
+    else:
+        return None
+
+def listMeasureByUser2(dum):
+    measures=[]
+    allMeasures = Measure.selectBy(dumID=dum.id)
+    for measure in allMeasures[-100:-1]:
+        measures.append({
+            "timestamp":measure.timestamp,
+            "vrms":measure.vrms,
+            "irms":measure.irms,
+            "active_power":measure.active_power,
+            "pf":measure.pf,
+            "thd_i":measure.thd_i,
+            "thd_v":measure.thd_v,
+            "cos_phi":measure.cos_phi,
+        })
+    return measures
