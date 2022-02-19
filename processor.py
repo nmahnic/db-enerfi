@@ -182,11 +182,11 @@ class Processor:
             for i in range(len(xpeak_i)):
                 i_harmonics.append(abs(yf_i[xpeak_i[i]])/harmonic1_i)
 
-            print ("V Harmonics':")
-            print (v_harmonics)
+            # print ("V Harmonics':")
+            # print (v_harmonics)
 
-            print ("I Harmonics':")
-            print (i_harmonics)
+            # print ("I Harmonics':")
+            # print (i_harmonics)
 
             thd_i = self.thd(abs(yf_i), xpeak_i)
             thd_v = self.thd(abs(yf_v), xpeak_v)
