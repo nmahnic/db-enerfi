@@ -9,6 +9,7 @@ import json
 
 def thd(abs_data,xpeak):  
     sq_sum=0.0
+    print("largo de xpeak ",len(xpeak))
     for r in range(len(abs_data)):
         if(r in xpeak):
             # print(abs_data[r],r)
@@ -42,10 +43,6 @@ corriente = jsonData["current"]
 
 sample_balanced = corriente - np.mean(corriente)
 
-fig, axs = plt.subplots(3)
-axs[0].plot(sample_balanced)
-axs[1].plot(sample_balanced)
-axs[1].set_xlim([0,200])
 abs_yf = np.abs(fft(sample_balanced))
 
 SAMPLE_RATE = 2500  # Hertz
@@ -58,8 +55,6 @@ xf = rfftfreq(N, 1 / SAMPLE_RATE)
 
 yf = f_signal.copy()
 xpeak,ypeak = find_peaks(abs(yf), distance=40)
-# yf[(np.abs(xf)>3)] = 0 # cut signal above 3Hz
-
 
 for x in range(5):
     yf[x] = 0
@@ -67,9 +62,63 @@ for x in range(5):
 
 maxYf = np.amax(np.abs(yf))
 print("MAX -> ",maxYf)
-axs[2].plot(xf, np.abs(yf)/maxYf)
-axs[2].set_xlim([0,900])
-axs[2].plot(xpeak,np.abs(yf[xpeak])/maxYf,'o')
+# X = xpeak
+# Y = np.abs(yf[xpeak])/maxYf
+
+valores = []
+xpeak = np.delete(xpeak,0)
+
+for i in range(11):
+    xpeak = np.delete(xpeak,len(xpeak)-1)
+
+for i in xpeak:
+    valores.append(np.abs(yf[i])/maxYf)
+
+fig, ax = plt.subplots()
+
+# Save the chart so we can loop through the bars below.
+bars = ax.bar(
+    x=np.arange(xpeak.size),
+    height=valores,
+    # tick_label=xpeak
+    # tick_label=[50,100,150,200,250,300,350,400,450,500,550,600,650,700,750,800,850,900,950,1000,1050,1100,1150,1200]
+    tick_label=range(1,xpeak.size+1)
+)
+
+# Axis formatting.
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.spines['bottom'].set_color('#DDDDDD')
+ax.tick_params(bottom=False, left=False)
+ax.set_axisbelow(True)
+ax.yaxis.grid(True, color='#EEEEEE')
+ax.xaxis.grid(False)
+
+# Grab the color of the bars so we can make the
+# text the same color.
+bar_color = bars[0].get_facecolor()
+
+# Add text annotations to the top of the bars.
+# Note, you'll have to adjust this slightly (the 0.3)
+# with different data.
+for bar in bars:
+    ax.text(
+        bar.get_x() + bar.get_width() / 2,
+        bar.get_height() + 0.01,
+        round(round(bar.get_height(), 3)*100,1),
+        horizontalalignment='center',
+        color=bar_color,
+        weight='bold'
+    )
+
+# Add labels and a title.
+ax.set_xlabel('Number of harmonic, fo=50Hz', labelpad=15, color='#333333')
+ax.set_ylabel('Percentage', labelpad=15, color='#333333')
+ax.set_title('Harmoics of Measure 19/02/2022 03:40:35 PM', pad=15, color='#333333', weight='bold')
+
+fig.tight_layout()
+
 
 
 # axs[1].set_ylim([100, yf.max()])

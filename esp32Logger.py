@@ -10,9 +10,9 @@ from client import Client
 import datetime 
 
 print("REQUEST: ",datetime.datetime.now())
-filename = 'sinRectificar/sample2022_02_19-03_57_56_PM.json'
-# filename = 'measurePava.json'
-# Opening JSON file
+filename = 'rectifcadorDiodo/sample2022_02_19-03_40_35_PM.json'
+# filename = 'sinRectificar/sample2022_02_19-03_57_45_PM.json'
+
 f = open(filename)
 jsonData = json.load(f)
 f.close()
