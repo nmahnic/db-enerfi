@@ -31,8 +31,8 @@ tension = []
 corriente = []
 
 
-filename = 'rectifcadorDiodo/sample2022_02_19-03_40_35_PM.json'
-# filename = "sinRectificar/sample2022_02_19-03_57_56_PM.json"
+# filename = 'rectifcadorDiodo/sample2022_02_19-03_40_35_PM.json'
+filename = "sinRectificar/sample2022_02_19-03_57_56_PM.json"
 f = open(filename)
 jsonData = json.load(f)
 f.close()
@@ -68,7 +68,7 @@ print("MAX -> ",maxYf)
 valores = []
 xpeak = np.delete(xpeak,0)
 
-for i in range(11):
+for i in range(12):
     xpeak = np.delete(xpeak,len(xpeak)-1)
 
 for i in xpeak:
